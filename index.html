@@ -215,9 +215,17 @@
     border:1.5px solid var(--line);color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;
     transition:background .25s ease,transform .25s ease;background:rgba(255,255,255,.8);}
   .social a:hover{transform:translateY(-2px);background:#fff;}
+  .acc .body .quote{font-family:var(--serif);font-style:italic;border-left:2px solid var(--line);
+    padding-left:16px;margin:16px 0;color:var(--ink-soft);}
   .social a svg{width:18px;height:18px;}
   .thanks-end{padding:26px 0 110px;text-align:center;}
   .thanks-end .heart{font-family:var(--serif);font-size:22px;font-weight:700;margin-bottom:24px;}
+  .rmacc{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.8);
+    margin-bottom:12px;overflow:hidden;}
+  .rmacc:last-of-type{border-bottom:1px solid var(--line);}
+  .rmacc summary{padding:18px 20px;}
+  .rm-head{display:flex;align-items:center;gap:16px;}
+  .rmacc .body{padding:0 20px 22px;}
 
   /* ===== topbar with logo ===== */
   .topbar{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:space-between;
@@ -524,10 +532,62 @@
     </div>
 
     <div class="reveal-map reveal">
-      <div class="rm"><span class="sw" style="background:linear-gradient(135deg,#0c6347,#3ddc84)"></span><div><div class="teaser">계속 자라는 세계</div><div class="label">지속성장 · Continued Growth</div></div></div>
-      <div class="rm"><span class="sw" style="background:linear-gradient(135deg,#4a1410,#d2402a)"></span><div><div class="teaser">무너진 세계</div><div class="label">붕괴 · Collapse</div></div></div>
-      <div class="rm"><span class="sw" style="background:linear-gradient(135deg,#1d2a78,#38d6ff)"></span><div><div class="teaser">완전히 바뀐 세계</div><div class="label">변형 · Transformation</div></div></div>
-      <div class="rm"><span class="sw" style="background:linear-gradient(135deg,#6b4a14,#e5a534)"></span><div><div class="teaser">멈춰 서서 지켜내는 세계</div><div class="label">보존 · Discipline</div></div></div>
+    <details class="acc rmacc">
+        <summary>
+          <div class="rm-head">
+            <span class="sw" style="background:linear-gradient(135deg,#0c6347,#3ddc84)"></span>
+            <div><div class="teaser">계속 자라는 세계</div><div class="label">지속성장 · Continued Growth</div></div>
+          </div>
+          <span class="pm"></span>
+        </summary>
+        <div class="body">
+          <p><span class="tag">세계관 · 세상은 어떻게 굴러가나</span>세계는 본질적으로 나아지는 시스템이고, 성장은 자연스럽고 가능하며 좋은 것이다. 자원의 한계는 인간의 기술과 창의로 계속 돌파된다.</p>
+          <p><span class="tag">앎 · 무엇을 안다고 하나</span>좋은 데이터와 모델, 전문가의 판단으로 문제는 풀린다. 거의 모든 정부와 교육 체제가 공식적으로 채택한 미래이기도 하다.</p>
+          <p><span class="tag">당위 · 무엇을 해야 하나</span>경제를 계속 키우고 체제를 정교하게 다듬는 것이 우리의 임무이자 선(善)이다.</p>
+        </div>
+      </details>
+      <details class="acc rmacc">
+        <summary>
+          <div class="rm-head">
+            <span class="sw" style="background:linear-gradient(135deg,#0c6347,#3ddc84)"></span>
+            <div><div class="teaser">무너진 세계</div><div class="label">붕괴 · Collapse</div></div>
+          </div>
+          <span class="pm"></span>
+        </summary>
+        <div class="body">
+          <p><span class="tag">세계관 · 세상은 어떻게 굴러가나</span>세계는 유한하고 취약하며 과도하게 확장돼 있다. 복잡하게 얽힌 시스템일수록 부서지기 쉽고, 변화는 불연속적·파국적일 수 있다.</p>
+          <p><span class="tag">앎 · 무엇을 안다고 하나</span>지금의 체제가 지속 불가능한 토대 위에 서 있다는 자각. 생태학과 문명 붕괴의 역사가 근거가 된다.</p>
+          <p><span class="tag">당위 · 무엇을 해야 하나</span>하나로 모이지 않는다. 붕괴를 대비하고 살아남는 것이 의무인 사람도, 경쟁의 끝을 오히려 반기는 사람도 있다.</p>
+        </div>
+      </details>
+      <details class="acc rmacc">
+        <summary>
+          <div class="rm-head">
+            <span class="sw" style="background:linear-gradient(135deg,#0c6347,#3ddc84)"></span>
+            <div><div class="teaser">멈춰 서서 지켜내는 세계</div><div class="label">보존 · Discipline</div></div>
+          </div>
+          <span class="pm"></span>
+        </summary>
+        <div class="body">
+          <p><span class="tag">세계관 · 세상은 어떻게 굴러가나</span>한계는 실재하지만 그 응답은 혼돈이 아니라 질서다. 세계는 물질적 축적보다 더 중요한 근본 가치를 중심으로 조직되어야 한다.</p>
+          <p><span class="tag">앎 · 무엇을 안다고 하나</span>지식이 그 핵심 가치에 닻을 내린다. 생태적 한계일 수도, 문화적 지혜일 수도 있다.</p>
+          <p><span class="tag">당위 · 무엇을 해야 하나</span>네 미래 중 당위가 가장 강하다. 우리는 그 가치를 중심으로 스스로를 규율해야 한다.</p>
+        </div>
+      </details>  
+      <details class="acc rmacc">
+        <summary>
+          <div class="rm-head">
+            <span class="sw" style="background:linear-gradient(135deg,#0c6347,#3ddc84)"></span>
+            <div><div class="teaser">완전히 바뀐 세계</div><div class="label">변형 · Transformation</div></div>
+          </div>
+          <span class="pm"></span>
+        </summary>
+        <div class="body">
+          <p><span class="tag">세계관 · 세상은 어떻게 굴러가나</span>기술이 현실의 범주 자체를 다시 만든다. 인간·자연·노동·배움처럼 주어진 것으로 여겨지던 것들이 새로 정의된다. 연속이 아니라 단절.</p>
+          <p><span class="tag">앎 · 무엇을 안다고 하나</span>가속하는 기술과 지능 자체의 재구성. 무엇을 안다는 것의 의미가 함께 바뀐다.</p>
+          <p><span class="tag">당위 · 무엇을 해야 하나</span>그 변화를 두려워하기보다 환영하고, 새 형태로 나아간다.</p>
+        </div>
+      </details>  
     </div>
 
     <div class="frame-block reveal">
@@ -546,18 +606,22 @@
       <b>참고 문헌</b> <br> · Dator, J. (2019). Alternative futures at the Manoa School. In Jim Dator: A Noticer in Time: Selected work, 1967-2018 (pp. 37-54). Cham: Springer International Publishing.<br>
       <b>워크샵 일시</b> <br>2026년 7월 5일<br>
       <b>워크샵 장소</b> <br>WTS 원투스픽 자기계발센터<br>
-      워크숍 기록을 바탕으로 재구성함.
+      <br>워크숍 기록을 바탕으로 재구성함.
     </div>
 
     <div class="profile reveal">
       <h3>모레오</h3>
       <div class="role">기획 · 진행</div>
       <div class="members" style="margin-top:18px;">
-        <span>김정헌</span><span>나영선</span><span>나호현</span><span>양새람</span>
+        <span>김정헌</span><span>나영선</span><span>나호현</span><span>양새람</span><br>
         <span>양우성</span><span>임서진</span><span>임채림</span><span>최서현</span>
       </div>
-      <p><br><br><span class="quote">“함께 미래의 가능성들을 찾고, 희망을 행동으로 바꾸는 모레오”</span> <br> <b>사단법인 미래학회 청년·미래세대특별위원회</b>의 활동명인 ‘모레오(More-O)’는 미래란 멀고 거창한 것이 아니라, 우리의 <b>‘내일모레’처럼 가까이에서 이미 시작되고 있다</b>는 의미를 담고 있습니다.</p>
+      <p><br><br><span class="quote">“함께 미래의 가능성들을 찾고, 희망을 행동으로 바꾸는 모레오”</span> <br><br> <b>사단법인 미래학회 청년·미래세대특별위원회</b>의 활동명인 ‘모레오(More-O)’는 미래란 멀고 거창한 것이 아니라, 우리의 <b>‘내일모레’처럼 가까이에서 이미 시작되고 있다</b>는 의미를 담고 있습니다.</p>
       <div class="social">
+        <a href="https://koreafutures.net" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.8 3.8 9S14.5 18.3 12 21c-2.5-2.7-3.8-5.8-3.8-9S9.5 5.7 12 3z"/></svg>
+          미래학회
+        </a>
         <a href="https://www.instagram.com/__more_o__futures/" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
           Instagram
@@ -565,6 +629,10 @@
         <a href="https://www.youtube.com/@more_o__futures" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
           YouTube
+        </a>
+        <a href="https://open.spotify.com/show/2ny1QBRnJ6RnYdxAfvJlMl?si=4745bc0d65254e70&nd=1&dlsi=3efbeff0ce78486b" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
+          Spotify
         </a>
       </div>
     </div>
