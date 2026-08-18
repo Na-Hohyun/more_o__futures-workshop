@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap" rel="stylesheet">
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
   :root{
     --ink:#1d1d1f; --ink-soft:#4b4b50; --ink-faint:#86868b;
@@ -58,13 +57,16 @@
      radial-gradient(62% 46% at 98% 96%,rgba(229,165,52,.09),transparent 62%),
      linear-gradient(180deg,#fbfbfc,#f2f2f5);}
   /* present: a step deeper */
-  #present{background:
-     radial-gradient(65% 45% at 6% 0%,rgba(12,99,71,.24),transparent 60%),
-     radial-gradient(62% 42% at 96% 4%,rgba(210,64,42,.22),transparent 60%),
-     radial-gradient(66% 48% at 2% 92%,rgba(29,42,120,.25),transparent 60%),
-     radial-gradient(64% 46% at 99% 98%,rgba(229,165,52,.22),transparent 60%),
-     linear-gradient(180deg,#a6aabd,#a8aac3);}
-  #present .eyebrow{color:#e6e6ed;}
+#present{background:
+   radial-gradient(65% 45% at 6% 0%,rgba(12,99,71,.42),transparent 60%),
+   radial-gradient(62% 42% at 96% 4%,rgba(210,64,42,.36),transparent 60%),
+   radial-gradient(66% 48% at 2% 92%,rgba(29,42,120,.44),transparent 60%),
+   radial-gradient(64% 46% at 99% 98%,rgba(229,165,52,.34),transparent 60%),
+   linear-gradient(180deg,#24262f,#2f303c);
+   color:#fff;}
+#present h2{color:#fff;}
+#present .eyebrow{color:rgba(255,255,255,.55);}
+#present .lead{color:rgba(255,255,255,.78);}
   /* lobby: deepest, near dark */
   #lobby{background:
      radial-gradient(70% 45% at 5% 0%,rgba(12,99,71,.5),transparent 58%),
@@ -161,6 +163,51 @@
   .lobby-final .fl{font-family:var(--serif);color:rgba(255,255,255,.75);margin-bottom:18px;font-size:17px;}
   #lobby .navrow{padding:0 0 90px;}
 
+  /* --- 진행 토스트 --- */
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,22px);z-index:80;
+  width:min(400px,calc(100% - 32px));padding:16px 20px;border-radius:18px;
+  background:rgba(255,255,255,.12);backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,.26);color:#fff;
+  box-shadow:0 24px 60px -22px rgba(0,0,0,.8);
+  opacity:0;pointer-events:none;transition:opacity .45s ease,transform .5s cubic-bezier(.2,.8,.2,1);}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+.toast .tt{font-family:var(--serif);font-weight:700;font-size:17px;}
+.toast .ts{font-size:13.5px;color:rgba(255,255,255,.68);margin-top:4px;}
+.toast .bars{display:flex;gap:6px;margin-top:13px;}
+.toast .bars i{height:4px;flex:1;border-radius:2px;background:rgba(255,255,255,.22);transition:background .5s ease;}
+.toast .bars i.on{background:#fff;}
+
+/* --- mission complete --- */
+.celebrate{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(65% 65% at 50% 45%,rgba(12,13,18,.86),rgba(7,8,11,.97));
+  backdrop-filter:blur(7px);opacity:0;visibility:hidden;transition:opacity .7s ease;}
+.celebrate.show{opacity:1;visibility:visible;}
+.celebrate .cin{position:relative;z-index:2;text-align:center;padding:0 28px;
+  transform:scale(.92);opacity:0;transition:transform .9s cubic-bezier(.2,.8,.2,1),opacity .9s ease .15s;}
+.celebrate.show .cin{transform:none;opacity:1;}
+.celebrate .ring{width:112px;height:112px;margin:0 auto 30px;position:relative;
+  animation:spin 14s linear infinite;}
+.celebrate .ring b{position:absolute;width:34px;height:34px;border-radius:50%;filter:blur(1px);
+  animation:pulse 2.6s ease-in-out infinite;}
+.celebrate .ring b:nth-child(1){top:0;left:39px;background:#3ddc84;}
+.celebrate .ring b:nth-child(2){top:39px;right:0;background:#d2402a;animation-delay:.3s;}
+.celebrate .ring b:nth-child(3){bottom:0;left:39px;background:#38d6ff;animation-delay:.6s;}
+.celebrate .ring b:nth-child(4){top:39px;left:0;background:#e5a534;animation-delay:.9s;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.8;}50%{transform:scale(1.35);opacity:1;}}
+.celebrate .ct{font-family:var(--serif);font-weight:700;color:#fff;
+  font-size:clamp(26px,7vw,40px);line-height:1.35;letter-spacing:-.01em;}
+.celebrate .cs{color:rgba(255,255,255,.62);font-size:16px;line-height:1.75;margin:18px auto 30px;max-width:400px;}
+.celebrate .cbtn{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+#cfx{position:absolute;inset:0;overflow:hidden;z-index:1;pointer-events:none;}
+#cfx i{position:absolute;top:58%;width:9px;height:15px;border-radius:2px;opacity:0;
+  animation-name:cf;animation-timing-function:cubic-bezier(.15,.6,.4,1);animation-fill-mode:forwards;}
+@keyframes cf{
+  0%{opacity:0;transform:translate(0,0) scale(.5) rotate(0);}
+  12%{opacity:1;}
+  55%{transform:translate(calc(var(--dx)*.62),var(--dy)) scale(1) rotate(calc(var(--rot)*.6));}
+  100%{opacity:0;transform:translate(var(--dx),26vh) scale(.9) rotate(var(--rot));}}
+
   /* ===== world ===== */
   .world{color:#fff;}
   .world .wtop{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:96px 0 46px;}
@@ -173,6 +220,16 @@
   /* NEW: overview block with the defining question */
   .world .shade .intro{font-family:var(--serif);font-style:italic;font-size:17px;line-height:1.7;
     color:rgba(255,255,255,.78);border-left:2px solid rgba(255,255,255,.35);padding-left:18px;}
+  .world .acc,#present .acc{border-color:rgba(255,255,255,.16);}
+.world .acc .at,#present .acc .at{color:#fff;}
+.world .acc .aq,#present .acc .aq{color:rgba(255,255,255,.55);}
+.world .acc .n,#present .acc .n{color:rgba(255,255,255,.5);}
+.world .pm,#present .pm{border-color:rgba(255,255,255,.35);}
+.world .pm::before,.world .pm::after,
+#present .pm::before,#present .pm::after{background:#fff;}
+.world .acc .body,#present .acc .body{color:rgba(255,255,255,.85);}
+.world .acc .body .tag,#present .acc .body .tag{color:rgba(255,255,255,.6);}
+.world .acc .body .quote,#present .acc .body .quote{border-left-color:rgba(255,255,255,.35);color:rgba(255,255,255,.8);}
   .ovw{padding:8px 0 30px;}
   .ovw .qbox{border:1px solid rgba(255,255,255,.22);border-radius:20px;padding:24px 22px;
     background:rgba(255,255,255,.07);backdrop-filter:blur(4px);}
@@ -264,7 +321,7 @@
 <section class="screen active" id="intro">
   <div class="wrap">
     <div class="hero">
-      <div class="reveal in"><span class="eyebrow">청년 미래 워크숍 · <2045년, 교실의 문을 열면></2045></span></div>
+      <div class="reveal in"><span class="eyebrow">청년 미래 워크숍 · <2050년, 교실의 문을 열면></span></div>
       <h1 class="display reveal in" style="margin-top:22px;">청년들이 그린 미래에<br>당신을 초대합니다.</h1>
       <p class="lead reveal in" style="margin-top:26px;">저희는 <b>교권의 미래</b>를 상상했습니다.<br>맞히려는 게 아니라, 그려보려고요.</p>
       <div class="scroll-hint reveal in"><span class="dot"></span> 아래로 내려가며 읽어보세요</div>
@@ -362,8 +419,8 @@
 
     <div class="cta-row reveal">
       <div class="navrow">
-        <button class="btn" onclick="go('lobby')">이제, 네 개의 미래로 <span class="arw">→</span></button>
-        <button class="btn ghost" onclick="go('intro')">← 처음으로</button>
+        <button class="btn on-dark" onclick="go('lobby')">이제, 네 개의 미래로 <span class="arw">→</span></button>
+        <button class="btn ghost on-dark" onclick="go('intro')">← 처음으로</button>
       </div>
     </div>
   </div>
@@ -375,7 +432,7 @@
     <div class="top">
       <div class="reveal in"><span class="eyebrow">2050년으로 · 네 개의 문</span></div>
       <h2 class="reveal in">어느 문으로든,<br>먼저 들어가세요.</h2>
-      <p class="sub reveal in">순서는 없습니다. 다녀온 문은 불이 켜집니다.<br>네 세계를 모두 지나오면, 마지막 이야기가 열립니다.</p>
+      <p class="sub reveal in">순서는 없습니다. 다녀온 문은 불이 켜집니다.<br><b style="color:#fff;">네 세계를 모두 지나야, 마지막 이야기가 열립니다.</b></p>
     </div>
     <div class="doors">
       <div class="door d1" onclick="enter(1)"><div class="glow"></div>
@@ -613,10 +670,10 @@
     </div>
 
     <div class="credit reveal">
-      <b>방법론</b> <br>Jim Dator의 ‘네 가지 대안 미래(Four Generic Futures)’ 기반 워크샵<br>
+      <b>방법론</b> <br>Jim Dator의 ‘네 가지 대안 미래(Four Generic Futures)’ 기반 워크숍<br>
       <b>참고 문헌</b> <br>Dator, J. (2019). Alternative futures at the Manoa School. In Jim Dator: A Noticer in Time: Selected work, 1967-2018 (pp. 37-54). Cham: Springer International Publishing.<br>
-      <b>워크샵 일시</b> <br>2026년 7월 5일<br>
-      <b>워크샵 장소</b> <br>WTS 원투스픽 자기계발센터<br>
+      <b>워크숍 일시</b> <br>2026년 7월 5일<br>
+      <b>워크숍 장소</b> <br>WTS 원투스픽 자기계발센터<br>
       <br>워크숍 기록을 바탕으로 재구성함.
     </div>
 
@@ -630,7 +687,7 @@
       <blockquote class="quote">"함께 미래의 가능성들을 찾고, 희망을 행동으로 바꾸는 모레오"</blockquote>
       <p><br><b>사단법인 미래학회 청년·미래세대특별위원회</b>의 활동명인 ‘모레오(More-O)’는 미래란 멀고 거창한 것이 아니라, 우리의 <b>‘내일모레’처럼 가까이에서 이미 시작되고 있다</b>는 의미를 담고 있습니다.</p>
       <div class="social">
-        <a href="koreafutures.net" target="_blank" rel="noopener">
+        <a href="https://koreafutures.net" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.8 3.8 9S14.5 18.3 12 21c-2.5-2.7-3.8-5.8-3.8-9S9.5 5.7 12 3z"/></svg>
           미래학회
         </a>
@@ -643,8 +700,7 @@
           YouTube
         </a>
         <a href="https://open.spotify.com/show/2ny1QBRnJ6RnYdxAfvJlMl?si=4745bc0d65254e70&nd=1&dlsi=3efbeff0ce78486b" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
-          Spotify
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9.3"/><path d="M7.3 9.5c3.1-.85 6.6-.5 9.4 1"/><path d="M8 12.6c2.5-.65 5.4-.35 7.7.9"/><path d="M8.7 15.5c2-.5 4.2-.28 6 .7"/></svg>          Spotify
         </a>
       </div>
     </div>
@@ -659,6 +715,25 @@
   </div>
 </section>
 
+<div class="toast" id="toast">
+  <div class="tt" id="toastT"></div>
+  <div class="ts" id="toastS"></div>
+  <div class="bars" id="toastB"><i></i><i></i><i></i><i></i></div>
+</div>
+
+<div class="celebrate" id="celebrate">
+  <div id="cfx"></div>
+  <div class="cin">
+    <div class="ring"><b></b><b></b><b></b><b></b></div>
+    <div class="ct">네 개의 문이<br>모두 열렸습니다.</div>
+    <div class="cs">계속 자라는 세계, 무너진 세계, 완전히 바뀐 세계,<br>그리고 멈춰 서서 지켜내는 세계까지.<br>이제 마지막 이야기가 남았습니다.</div>
+    <div class="cbtn">
+      <button class="btn on-dark" onclick="closeCelebrate();go('final')">마지막 이야기 열기 <span class="arw">→</span></button>
+      <button class="btn ghost on-dark" onclick="closeCelebrate()">로비에 더 머물기</button>
+    </div>
+  </div>
+</div>
+        
 <div class="topbar">
   <div class="brand" onclick="go('intro')">
     <img class="ld" src="data:image/png;base64,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" alt="모레오">
@@ -674,6 +749,8 @@
   var visited = new Set();
   var homeBtn = document.getElementById('homeBtn');
   var darkScreens = {lobby:1,w1:1,w2:1,w3:1,w4:1};
+  var darkScreens = {present:1,lobby:1,w1:1,w2:1,w3:1,w4:1};
+  
 
   function setActive(id){
     screens.forEach(function(s){ s.classList.toggle('active', s.id===id); });
@@ -683,8 +760,54 @@
     var showHome = (id.charAt(0)==='w' && id.length===2) || id==='final';
     homeBtn.classList.toggle('show', showHome);
     requestAnimationFrame(function(){ armReveals(el); });
+        if(id==='lobby' && pendingToast){
+      pendingToast = false;
+      setTimeout(function(){ visited.size===4 ? celebrate() : showToast(); }, 550);
+    }
   }
   window.go = function(id){ setActive(id); };
+
+  var pendingToast = false, toastTimer = null;
+
+  function showToast(){
+    var n = visited.size;
+    document.getElementById('toastT').textContent = n + ' / 4 미래를 다녀왔습니다!';
+    document.getElementById('toastS').textContent =
+      n===3 ? '이제 하나 남았습니다. 마지막 문을 열어보세요.'
+            : '다른 미래도 계속 탐험해볼까요?';
+    var bars = document.getElementById('toastB').children;
+    for(var i=0;i<4;i++){ bars[i].classList.toggle('on', i<n); }
+    var t = document.getElementById('toast');
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 3800);
+  }
+
+  function burst(){
+    var colors=['#3ddc84','#d2402a','#38d6ff','#e5a534'];
+    var host=document.getElementById('cfx'); host.innerHTML='';
+    for(var i=0;i<80;i++){
+      var p=document.createElement('i');
+      p.style.left=(50+(Math.random()*2-1)*10)+'%';
+      p.style.background=colors[i%4];
+      p.style.setProperty('--dx',((Math.random()*2-1)*55)+'vw');
+      p.style.setProperty('--dy',(-32-Math.random()*40)+'vh');
+      p.style.setProperty('--rot',(Math.random()*720-360)+'deg');
+      p.style.animationDelay=(Math.random()*.4)+'s';
+      p.style.animationDuration=(1.8+Math.random()*1.3)+'s';
+      host.appendChild(p);
+    }
+  }
+
+  function celebrate(){
+    document.getElementById('celebrate').classList.add('show');
+    burst();
+    setTimeout(burst, 1400);
+  }
+  window.closeCelebrate = function(){
+    document.getElementById('celebrate').classList.remove('show');
+    document.getElementById('cfx').innerHTML='';
+  };
 
   window.enter = function(n){
     visited.add(n);
@@ -696,9 +819,10 @@
     }
     document.getElementById('progText').textContent = visited.size + ' / 4 지나옴';
     document.getElementById('lobbyFinal').classList.toggle('show', visited.size===4);
+    pendingToast = true;
     setActive('w'+n);
   };
-
+  
   var io = new IntersectionObserver(function(entries){
     entries.forEach(function(e){
       if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
