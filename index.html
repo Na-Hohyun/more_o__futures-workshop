@@ -17,12 +17,14 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html{scroll-behavior:smooth;}
-  body{font-family:var(--sans);background:var(--paper);color:var(--ink);
+    body{font-family:var(--sans);background:#0b0c10;color:var(--ink); ... }
     line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden;}
 
   .screen{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;
     opacity:0;visibility:hidden;pointer-events:none;
-    transition:opacity .75s ease;-webkit-overflow-scrolling:touch;}
+  .screen{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;
+    opacity:0;visibility:hidden;pointer-events:none;
+    transition:opacity .35s ease;-webkit-overflow-scrolling:touch;}
   .screen.active{opacity:1;visibility:visible;pointer-events:auto;}
   .wrap{max-width:720px;margin:0 auto;padding:0 26px;}
 
@@ -163,6 +165,10 @@
   .lobby-final .fl{font-family:var(--serif);color:rgba(255,255,255,.75);margin-bottom:18px;font-size:17px;}
   #lobby .navrow{padding:0 0 90px;}
 
+.fader{position:fixed;inset:0;z-index:70;background:#0b0c10;
+  opacity:0;pointer-events:none;transition:opacity .4s ease;}
+.fader.on{opacity:1;pointer-events:auto;}
+          
   /* --- 진행 토스트 --- */
 .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,22px);z-index:80;
   width:min(400px,calc(100% - 32px));padding:16px 20px;border-radius:18px;
@@ -263,6 +269,23 @@
   .frame-block{padding:48px 0;border-top:1px solid var(--line);}
   .frame-block .big-line{margin-bottom:18px;}
   .frame-block p{color:var(--ink-soft);font-size:16.5px;margin-bottom:14px;}
+  .srcwrap{margin:26px 0 6px;}
+.srclabel{font-size:12px;letter-spacing:.18em;font-weight:700;
+  color:var(--ink-faint);text-transform:uppercase;margin-bottom:14px;}
+.srcgrid{display:grid;gap:10px;}
+.srcrow{display:grid;grid-template-columns:28px 1fr;gap:14px;align-items:start;
+  padding:17px 19px;border-radius:16px;
+  background:rgba(255,255,255,.82);border:1px solid var(--line);}
+.srcrow .sw{width:24px;height:24px;border-radius:50%;margin-top:4px;flex:none;}
+.srcrow .w{font-size:13px;font-weight:700;letter-spacing:.04em;color:var(--ink-faint);}
+.srcrow .src{font-family:var(--serif);font-weight:700;
+  font-size:19px;line-height:1.35;margin:3px 0 7px;}
+.srcrow .one{font-size:14.5px;line-height:1.7;color:var(--ink-soft);}
+@media (min-width:660px){
+  .srcrow{grid-template-columns:28px 186px 1fr;align-items:center;column-gap:20px;}
+  .srcrow .src{margin:3px 0 0;font-size:18px;}
+  .srcrow .one{padding-left:4px;}
+}
   .credit{padding:38px 0;border-top:1px solid var(--line);color:var(--ink-faint);font-size:14px;line-height:1.9;}
   .members{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;}
   .members span{display:inline-block;padding:7px 14px;border-radius:980px;background:rgba(255,255,255,.75);
@@ -308,11 +331,12 @@
   .topbar .home.show{opacity:1;}
   body.dark-ui .topbar .home{color:rgba(255,255,255,.88);background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.22);}
 
-  @media (prefers-reduced-motion:reduce){
-    *{animation:none!important;}
-    .reveal{opacity:1;transform:none;transition:none;}
-    html{scroll-behavior:auto;}
-  }
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;}
+  .reveal{opacity:1;transform:none;transition:none;}
+  .fader{transition:none;}
+  html{scroll-behavior:auto;}
+}
 </style>
 </head>
 <body>
@@ -323,7 +347,7 @@
     <div class="hero">
       <div class="reveal in"><span class="eyebrow">청년 미래 워크숍 · <2050년, 교실의 문을 열면></span></div>
       <h1 class="display reveal in" style="margin-top:22px;">청년들이 그린 미래에<br>당신을 초대합니다.</h1>
-      <p class="lead reveal in" style="margin-top:26px;">저희는 <b>교권의 미래</b>를 상상했습니다.<br>맞히려는 게 아니라, 그려보려고요.</p>
+      <p class="lead reveal in" style="margin-top:26px;">저희는 <b>교권의 미래</b>를 상상했습니다.<br>맞히려고 하기 보다는, 그려보려고요.</p>
       <div class="scroll-hint reveal in"><span class="dot"></span> 아래로 내려가며 읽어보세요</div>
     </div>
 
@@ -664,6 +688,49 @@
       <p>같은 질문을 네 개의 다른 세계에 던졌더니, ‘권위의 원천’이라는 교권의 속살이 드러난 셈입니다.</p>
     </div>
 
+        <div class="srcwrap">
+        <div class="srclabel">권위는 어디서 나오는가</div>
+        <div class="srcgrid">
+
+          <div class="srcrow">
+            <span class="sw" style="background:linear-gradient(135deg,#0c6347,#3ddc84)"></span>
+            <div>
+              <div class="w">계속 자라는 세계</div>
+              <div class="src">제도·전문성<br>＋ 시장 서열</div>
+            </div>
+            <div class="one">팬덤화와 양극화. 몰리는 곳의 교사는 브랜드가 되고, 밀려난 곳에서는 지도 의지 자체가 꺾인다.</div>
+          </div>
+
+          <div class="srcrow">
+            <span class="sw" style="background:linear-gradient(135deg,#4a1410,#d2402a)"></span>
+            <div>
+              <div class="w">무너진 세계</div>
+              <div class="src">희소성</div>
+            </div>
+            <div class="one">공교육과 교육부가 무너진 자리에서 남은 교사가 귀해진다. 존경은 받지만, 그 존경은 안정된 권위와 다르다.</div>
+          </div>
+
+          <div class="srcrow">
+            <span class="sw" style="background:linear-gradient(135deg,#1d2a78,#38d6ff)"></span>
+            <div>
+              <div class="w">완전히 바뀐 세계</div>
+              <div class="src">인간성 ·<br>삶의 안내</div>
+            </div>
+            <div class="one">AI가 지식을 맡자, 인간 교사는 '어떻게 살 것인가'를 함께 묻는 스승으로 다시 정의된다.</div>
+          </div>
+
+          <div class="srcrow">
+            <span class="sw" style="background:linear-gradient(135deg,#6b4a14,#e5a534)"></span>
+            <div>
+              <div class="w">멈춰 지키는 세계</div>
+              <div class="src">사회적 합의 ·<br>규칙의 관장</div>
+            </div>
+            <div class="one">조화와 공존을 지키는 놀이의 진행자로서, 규칙을 쥔 데서 권한이 회복된다.</div>
+          </div>
+
+        </div>
+      </div>
+    
     <div class="frame-block reveal" style="padding-top:0;border-top:none;">
       <div class="big-line">예측보다는, 상상에 집중.</div>
       <p>맞고 틀리고를 가리려는 게 아니었습니다. 지금 청년들이 교권의 미래를 어떻게 상상하는지 — 그 상상 자체를 남기고 싶었습니다. 우리가 직접 그렸다는 것, 그 자체로 의미가 있다고 믿으면서요.</p>
@@ -715,6 +782,8 @@
   </div>
 </section>
 
+<div class="fader" id="fader"></div>
+        
 <div class="toast" id="toast">
   <div class="tt" id="toastT"></div>
   <div class="ts" id="toastS"></div>
@@ -765,7 +834,21 @@
       setTimeout(function(){ visited.size===4 ? celebrate() : showToast(); }, 550);
     }
   }
-  window.go = function(id){ setActive(id); };
+var fader = document.getElementById('fader');
+var fading = false;
+function transitionTo(id){
+  if(fading) return;
+  fading = true;
+  fader.classList.add('on');
+  setTimeout(function(){
+    setActive(id);
+    setTimeout(function(){
+      fader.classList.remove('on');
+      fading = false;
+    }, 80);
+  }, 400);
+}
+window.go = function(id){ transitionTo(id); };
 
   var pendingToast = false, toastTimer = null;
 
@@ -820,7 +903,7 @@
     document.getElementById('progText').textContent = visited.size + ' / 4 지나옴';
     document.getElementById('lobbyFinal').classList.toggle('show', visited.size===4);
     pendingToast = true;
-    setActive('w'+n);
+    transitionTo('w'+n);
   };
   
   var io = new IntersectionObserver(function(entries){
