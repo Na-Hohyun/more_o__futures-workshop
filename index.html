@@ -1,1 +1,921 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>청년들이 그린 교권의 미래</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1d1d1f; --ink-soft:#4b4b50; --ink-faint:#86868b;
+    --paper:#f5f5f7; --line:#d9d9de;
+    --serif:"Gowun Batang",serif;
+    --sans:"IBM Plex Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans);background:#0b0c10;color:var(--ink);
+    line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden;}
 
+  .screen{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;
+    opacity:0;visibility:hidden;pointer-events:none;
+    transition:opacity .35s ease;-webkit-overflow-scrolling:touch;}
+  .screen.active{opacity:1;visibility:visible;pointer-events:auto;}
+  .wrap{max-width:720px;margin:0 auto;padding:0 26px;}
+
+  .reveal{opacity:0;transform:translateY(22px);
+    transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+
+  .eyebrow{font-size:12px;letter-spacing:.22em;font-weight:700;
+    text-transform:uppercase;color:var(--ink-faint);}
+  h1,h2,h3{font-family:var(--serif);font-weight:700;letter-spacing:-.01em;line-height:1.28;}
+  .display{font-size:clamp(34px,8.5vw,58px);font-weight:700;line-height:1.22;letter-spacing:-.02em;}
+  .lead{font-size:clamp(19px,4.6vw,26px);color:var(--ink-soft);font-family:var(--serif);font-weight:400;line-height:1.6;}
+  .big-line{font-family:var(--serif);font-weight:700;font-size:clamp(24px,6vw,38px);line-height:1.4;letter-spacing:-.01em;}
+
+  .btn{display:inline-flex;align-items:center;gap:.5em;font-family:var(--sans);font-size:16px;font-weight:600;
+    padding:14px 26px;border-radius:980px;border:none;cursor:pointer;
+    background:var(--ink);color:#fff;transition:transform .25s ease;}
+  .btn:hover{transform:translateY(-2px);}
+  .btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);}
+  .btn.on-dark{background:rgba(255,255,255,.94);color:#111;}
+  .btn.ghost.on-dark{background:transparent;color:#fff;border-color:rgba(255,255,255,.4);}
+  .btn .arw{transition:transform .25s ease;}
+  .btn:hover .arw{transform:translateX(3px);}
+  .navrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+
+  /* ===== gradient depth stages ===== */
+  /* intro: white base + one drop of each of the four colors */
+  #intro{background:
+     radial-gradient(60% 42% at 8% 2%,rgba(12,99,71,.09),transparent 62%),
+     radial-gradient(58% 40% at 95% 6%,rgba(210,64,42,.085),transparent 62%),
+     radial-gradient(62% 46% at 4% 88%,rgba(29,42,120,.085),transparent 62%),
+     radial-gradient(62% 46% at 98% 96%,rgba(229,165,52,.09),transparent 62%),
+     linear-gradient(180deg,#fbfbfc,#f2f2f5);}
+  /* present: a step deeper */
+#present{background:
+   radial-gradient(65% 45% at 6% 0%,rgba(12,99,71,.34),transparent 60%),
+   radial-gradient(62% 42% at 96% 4%,rgba(210,64,42,.3),transparent 60%),
+   radial-gradient(66% 48% at 2% 92%,rgba(29,42,120,.36),transparent 60%),
+   radial-gradient(64% 46% at 99% 98%,rgba(229,165,52,.28),transparent 60%),
+   linear-gradient(180deg,#4e5160,#5a5c6d);
+   color:#fff;}
+#present h2{color:#fff;}
+#present .eyebrow{color:rgba(255,255,255,.55);}
+#present .lead{color:rgba(255,255,255,.78);}
+  /* lobby: deepest, near dark */
+  #lobby{background:
+     radial-gradient(70% 45% at 5% 0%,rgba(12,99,71,.5),transparent 58%),
+     radial-gradient(66% 42% at 97% 5%,rgba(150,40,26,.45),transparent 58%),
+     radial-gradient(70% 50% at 2% 95%,rgba(29,42,120,.5),transparent 58%),
+     radial-gradient(66% 46% at 99% 99%,rgba(150,105,30,.42),transparent 58%),
+     linear-gradient(180deg,#0d0e12,#111218);
+     color:#fff;}
+  /* final: bright again — the experience ends */
+  #final{background:
+     radial-gradient(60% 42% at 10% 0%,rgba(12,99,71,.08),transparent 62%),
+     radial-gradient(58% 40% at 94% 4%,rgba(210,64,42,.07),transparent 62%),
+     radial-gradient(60% 46% at 6% 92%,rgba(29,42,120,.07),transparent 62%),
+     radial-gradient(60% 44% at 97% 98%,rgba(229,165,52,.08),transparent 62%),
+     linear-gradient(180deg,#fdfdfe,#f4f4f7);}
+
+  /* ===== intro ===== */
+  #intro .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:96px 0 60px;}
+  .scroll-hint{margin-top:40px;font-size:13px;color:var(--ink-faint);display:flex;align-items:center;gap:8px;}
+  .scroll-hint .dot{width:22px;height:34px;border:1.5px solid var(--line);border-radius:12px;position:relative;flex:none;}
+  .scroll-hint .dot::after{content:"";position:absolute;top:6px;left:50%;transform:translateX(-50%);
+    width:3px;height:7px;border-radius:2px;background:var(--ink-faint);animation:sd 1.7s infinite;}
+  @keyframes sd{0%{opacity:0;transform:translate(-50%,0)}30%{opacity:1}70%{opacity:1}100%{opacity:0;transform:translate(-50%,10px)}}
+  .block{padding:64px 0;}
+  .block h2{font-size:clamp(26px,6vw,40px);margin-bottom:22px;}
+  .lenses{display:grid;gap:12px;margin-top:24px;}
+  .lens{display:flex;align-items:center;gap:16px;padding:16px 18px;border-radius:16px;
+    background:rgba(255,255,255,.72);border:1px solid var(--line);backdrop-filter:blur(6px);}
+  .lens .sw{width:34px;height:34px;border-radius:50%;flex:none;}
+  .lens .lb{font-family:var(--serif);font-weight:700;font-size:17px;}
+  .lens .ds{font-size:13.5px;color:var(--ink-faint);margin-top:2px;}
+  .cta-row{padding:20px 0 110px;}
+
+  /* ===== accordion (shared) ===== */
+  .acc{border-top:1px solid var(--line);}
+  .acc:last-of-type{border-bottom:1px solid var(--line);}
+  .acc summary{list-style:none;cursor:pointer;padding:24px 4px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .acc summary::-webkit-details-marker{display:none;}
+  .acc .at{font-family:var(--serif);font-weight:700;font-size:clamp(19px,4.6vw,23px);}
+  .acc .aq{font-size:13px;color:var(--ink-faint);margin-top:5px;font-family:var(--sans);}
+  .acc .n{font-family:var(--serif);font-weight:700;font-size:13px;color:var(--ink-faint);letter-spacing:.06em;margin-bottom:5px;}
+  .pm{width:30px;height:30px;flex:none;border:1.5px solid var(--line);border-radius:50%;position:relative;transition:transform .35s ease;}
+  .pm::before,.pm::after{content:"";position:absolute;background:var(--ink);border-radius:2px;top:50%;left:50%;transform:translate(-50%,-50%);}
+  .pm::before{width:12px;height:2px;} .pm::after{width:2px;height:12px;transition:opacity .35s ease;}
+  .acc[open] .pm{transform:rotate(180deg);} .acc[open] .pm::after{opacity:0;}
+  .acc .body{padding:0 4px 28px;color:var(--ink-soft);font-size:16px;line-height:1.85;}
+  .acc .body p{margin-bottom:14px;} .acc .body p:last-child{margin-bottom:0;}
+  .acc .body .tag{font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.03em;
+    color:var(--ink-faint);display:block;margin-bottom:6px;}
+  .acc .body .quote{font-family:var(--serif);font-style:italic;border-left:2px solid var(--line);
+    padding-left:16px;margin:16px 0;color:var(--ink-soft);}
+
+  /* dark variant inside worlds */
+  .world .acc{border-color:rgba(255,255,255,.16);}
+  .world .acc .at{color:#fff;}
+  .world .acc .aq{color:rgba(255,255,255,.55);}
+  .world .pm{border-color:rgba(255,255,255,.35);}
+  .world .pm::before,.world .pm::after{background:#fff;}
+  .world .acc .body{color:rgba(255,255,255,.85);}
+  .world .acc .body .tag{color:rgba(255,255,255,.6);}
+
+  #present .top{padding:120px 0 14px;}
+
+  /* ===== lobby ===== */
+  #lobby .top{padding:112px 0 12px;}
+  #lobby .eyebrow{color:rgba(255,255,255,.5);}
+  #lobby h2{color:#fff;font-size:clamp(26px,6.4vw,40px);}
+  #lobby .sub{color:rgba(255,255,255,.62);margin-top:14px;font-size:16px;}
+  .doors{display:grid;gap:16px;padding:34px 0 20px;}
+  .door{position:relative;border-radius:22px;overflow:hidden;cursor:pointer;min-height:150px;
+    display:flex;flex-direction:column;justify-content:flex-end;padding:22px;color:#fff;
+    border:1px solid rgba(255,255,255,.08);background:#15161b;
+    transition:transform .3s ease,box-shadow .5s ease,border-color .5s ease,filter .6s ease;
+    filter:saturate(.25) brightness(.72);}
+  .door:hover{transform:translateY(-3px);}
+  .door .glow{position:absolute;inset:0;opacity:.5;transition:opacity .6s ease;z-index:0;}
+  .door .dt{position:relative;z-index:1;}
+  .door .teaser{font-family:var(--serif);font-weight:700;font-size:20px;line-height:1.35;}
+  .door .state{position:relative;z-index:1;font-size:12.5px;letter-spacing:.04em;color:rgba(255,255,255,.72);
+    margin-top:10px;display:flex;align-items:center;gap:7px;}
+  .door .state .ic{width:15px;height:15px;flex:none;opacity:.85;}
+  .door.visited{filter:none;border-color:rgba(255,255,255,.22);box-shadow:0 18px 50px -18px var(--vc,rgba(0,0,0,.6));}
+  .door.visited .glow{opacity:1;}
+  .door.d1{--vc:rgba(12,99,71,.7);} .door.d2{--vc:rgba(74,20,16,.75);}
+  .door.d3{--vc:rgba(29,42,120,.7);} .door.d4{--vc:rgba(107,74,20,.7);}
+  .door.d1 .glow{background:radial-gradient(120% 90% at 80% 0%,rgba(61,220,132,.4),transparent 60%),linear-gradient(160deg,#063d2d,#0c6347);}
+  .door.d2 .glow{background:radial-gradient(100% 80% at 20% 110%,rgba(210,64,42,.55),transparent 55%),linear-gradient(155deg,#160707,#4a1410);}
+  .door.d3 .glow{background:radial-gradient(110% 80% at 85% 12%,rgba(56,214,255,.45),transparent 55%),linear-gradient(160deg,#070a26,#1d2a78);}
+  .door.d4 .glow{background:radial-gradient(110% 80% at 25% 4%,rgba(229,165,52,.45),transparent 55%),linear-gradient(160deg,#241606,#6b4a14);}
+  .prog{padding-bottom:18px;font-size:13px;color:rgba(255,255,255,.42);letter-spacing:.05em;}
+  .lobby-final{padding:6px 0 26px;text-align:center;opacity:0;max-height:0;overflow:hidden;
+    transition:opacity .7s ease,max-height .7s ease;}
+  .lobby-final.show{opacity:1;max-height:340px;}
+  .lobby-final .fl{font-family:var(--serif);color:rgba(255,255,255,.75);margin-bottom:18px;font-size:17px;}
+  #lobby .navrow{padding:0 0 90px;}
+
+.fader{position:fixed;inset:0;z-index:70;background:#0b0c10;
+  opacity:0;pointer-events:none;transition:opacity .4s ease;}
+.fader.on{opacity:1;pointer-events:auto;}
+          
+  /* --- 진행 토스트 --- */
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,22px);z-index:80;
+  width:min(400px,calc(100% - 32px));padding:16px 20px;border-radius:18px;
+  background:rgba(255,255,255,.12);backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,.26);color:#fff;
+  box-shadow:0 24px 60px -22px rgba(0,0,0,.8);
+  opacity:0;pointer-events:none;transition:opacity .45s ease,transform .5s cubic-bezier(.2,.8,.2,1);}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+.toast .tt{font-family:var(--serif);font-weight:700;font-size:17px;}
+.toast .ts{font-size:13.5px;color:rgba(255,255,255,.68);margin-top:4px;}
+.toast .bars{display:flex;gap:6px;margin-top:13px;}
+.toast .bars i{height:4px;flex:1;border-radius:2px;background:rgba(255,255,255,.22);transition:background .5s ease;}
+.toast .bars i.on{background:#fff;}
+
+/* --- mission complete --- */
+.celebrate{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(65% 65% at 50% 45%,rgba(12,13,18,.86),rgba(7,8,11,.97));
+  backdrop-filter:blur(7px);opacity:0;visibility:hidden;transition:opacity .7s ease;}
+.celebrate.show{opacity:1;visibility:visible;}
+.celebrate .cin{position:relative;z-index:2;text-align:center;padding:0 28px;
+  transform:scale(.92);opacity:0;transition:transform .9s cubic-bezier(.2,.8,.2,1),opacity .9s ease .15s;}
+.celebrate.show .cin{transform:none;opacity:1;}
+.celebrate .ring{width:112px;height:112px;margin:0 auto 30px;position:relative;
+  animation:spin 14s linear infinite;}
+.celebrate .ring b{position:absolute;width:34px;height:34px;border-radius:50%;filter:blur(1px);
+  animation:pulse 2.6s ease-in-out infinite;}
+.celebrate .ring b:nth-child(1){top:0;left:39px;background:#3ddc84;}
+.celebrate .ring b:nth-child(2){top:39px;right:0;background:#d2402a;animation-delay:.3s;}
+.celebrate .ring b:nth-child(3){bottom:0;left:39px;background:#38d6ff;animation-delay:.6s;}
+.celebrate .ring b:nth-child(4){top:39px;left:0;background:#e5a534;animation-delay:.9s;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.8;}50%{transform:scale(1.35);opacity:1;}}
+.celebrate .ct{font-family:var(--serif);font-weight:700;color:#fff;
+  font-size:clamp(26px,7vw,40px);line-height:1.35;letter-spacing:-.01em;}
+.celebrate .cs{color:rgba(255,255,255,.62);font-size:16px;line-height:1.75;margin:18px auto 30px;max-width:400px;}
+.celebrate .cbtn{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+#cfx{position:absolute;inset:0;overflow:hidden;z-index:1;pointer-events:none;}
+#cfx i{position:absolute;top:58%;width:9px;height:15px;border-radius:2px;opacity:0;
+  animation-name:cf;animation-timing-function:cubic-bezier(.15,.6,.4,1);animation-fill-mode:forwards;}
+@keyframes cf{
+  0%{opacity:0;transform:translate(0,0) scale(.5) rotate(0);}
+  12%{opacity:1;}
+  55%{transform:translate(calc(var(--dx)*.62),var(--dy)) scale(1) rotate(calc(var(--rot)*.6));}
+  100%{opacity:0;transform:translate(var(--dx),26vh) scale(.9) rotate(var(--rot));}}
+
+  /* ===== world ===== */
+  .world{color:#fff;}
+  .world .wtop{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:96px 0 46px;}
+  .world .teaser-eyebrow{font-size:13px;letter-spacing:.2em;font-weight:700;color:rgba(255,255,255,.55);
+    text-transform:uppercase;margin-bottom:18px;}
+  .world .essence{font-family:var(--serif);font-weight:700;font-size:clamp(27px,6.8vw,44px);line-height:1.4;letter-spacing:-.01em;}
+  .world .essence span{font-size:.62em;font-weight:400;line-height:1.55;display:block;margin-top:14px;}
+  .world .year{margin-top:22px;font-size:15px;color:rgba(255,255,255,.6);letter-spacing:.03em;}
+  .world .wdesc{margin-top:26px;font-size:20px;line-height:1.85;color:rgba(255,255,255,.75);max-width:580px;}
+  /* NEW: overview block with the defining question */
+  .world .shade .intro{font-family:var(--serif);font-style:italic;font-size:17px;line-height:1.7;
+    color:rgba(255,255,255,.78);border-left:2px solid rgba(255,255,255,.35);padding-left:18px;}
+  .world .acc,#present .acc{border-color:rgba(255,255,255,.16);}
+.world .acc .at,#present .acc .at{color:#fff;}
+.world .acc .aq,#present .acc .aq{color:rgba(255,255,255,.55);}
+.world .acc .n,#present .acc .n{color:rgba(255,255,255,.5);}
+.world .pm,#present .pm{border-color:rgba(255,255,255,.35);}
+.world .pm::before,.world .pm::after,
+#present .pm::before,#present .pm::after{background:#fff;}
+.world .acc .body,#present .acc .body{color:rgba(255,255,255,.85);}
+.world .acc .body .tag,#present .acc .body .tag{color:rgba(255,255,255,.6);}
+.world .acc .body .quote,#present .acc .body .quote{border-left-color:rgba(255,255,255,.35);color:rgba(255,255,255,.8);}
+  .ovw{padding:8px 0 30px;}
+  .ovw .qbox{border:1px solid rgba(255,255,255,.22);border-radius:20px;padding:24px 22px;
+    background:rgba(255,255,255,.07);backdrop-filter:blur(4px);}
+  .ovw .qlabel{font-size:12px;letter-spacing:.18em;font-weight:700;color:rgba(255,255,255,.55);
+    text-transform:uppercase;margin-bottom:12px;}
+  .ovw .q{font-family:var(--serif);font-weight:700;font-size:clamp(21px,5.2vw,27px);line-height:1.45;margin-bottom:18px;}
+  .ovw .alist{display:grid;gap:14px;}
+  .ovw .ai{display:flex;gap:13px;align-items:flex-start;}
+  .ovw .ai .bull{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.7);margin-top:9px;flex:none;}
+  .ovw .ai .txt{font-size:15.5px;line-height:1.75;color:rgba(255,255,255,.88);}
+  .ovw .ai .txt b{color:#fff;}
+  .ovw .how{margin-top:22px;font-size:15px;line-height:1.8;color:rgba(255,255,255,.7);}
+  .world .axes-label{font-size:12px;letter-spacing:.18em;font-weight:700;color:rgba(255,255,255,.45);
+    text-transform:uppercase;padding:16px 0 4px;}
+  .world .shade{padding:8px 0 44px;}
+  .world .shade .sl{font-family:var(--serif);font-style:italic;font-size:24px;line-height:1.7;
+    color:rgba(255,255,255,.78);border-left:2px solid rgba(255,255,255,.35);padding-left:18px;}
+  .world .navrow{padding:0 0 84px;}
+
+  /* ===== final ===== */
+  #final .top{padding:120px 0 26px;}
+  .reveal-map{display:grid;gap:12px;padding:20px 0 40px;}
+  .rm{display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:18px;
+    background:rgba(255,255,255,.8);border:1px solid var(--line);}
+  .rm .sw{width:30px;height:30px;border-radius:50%;flex:none;}
+  .rm-head .sw{width:30px;height:30px;border-radius:50%;flex:none;}
+  .rm .teaser{font-size:14px;color:var(--ink-faint);}
+  .rm .label{font-family:var(--serif);font-weight:700;font-size:19px;}
+  .rm .teaser,.rm-head .teaser{font-size:14px;color:var(--ink-faint);}
+  .rm .label,.rm-head .label{font-family:var(--serif);font-weight:700;font-size:19px;}
+  .frame-block{padding:48px 0;border-top:1px solid var(--line);}
+  .frame-block .big-line{margin-bottom:18px;}
+  .frame-block p{color:var(--ink-soft);font-size:16.5px;margin-bottom:14px;}
+  .srcwrap{margin:26px 0 6px;}
+.srclabel{font-size:12px;letter-spacing:.18em;font-weight:700;
+  color:var(--ink-faint);text-transform:uppercase;margin-bottom:14px;}
+.srcgrid{display:grid;gap:10px;}
+.srcrow{display:grid;grid-template-columns:28px 1fr;gap:14px;align-items:start;
+  padding:17px 19px;border-radius:16px;
+  background:rgba(255,255,255,.82);border:1px solid var(--line);}
+.srcrow .sw{width:24px;height:24px;border-radius:50%;margin-top:4px;flex:none;}
+.srcrow .w{font-size:13px;font-weight:700;letter-spacing:.04em;color:var(--ink-faint);}
+.srcrow .src{font-family:var(--serif);font-weight:700;
+  font-size:19px;line-height:1.35;margin:3px 0 7px;}
+.srcrow .one{font-size:14.5px;line-height:1.7;color:var(--ink-soft);}
+@media (min-width:660px){
+  .srcrow{grid-template-columns:28px 186px 1fr;align-items:center;column-gap:20px;}
+  .srcrow .src{margin:3px 0 0;font-size:18px;}
+  .srcrow .one{padding-left:4px;}
+}
+  .credit{padding:38px 0;border-top:1px solid var(--line);color:var(--ink-faint);font-size:14px;line-height:1.9;}
+  .members{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;}
+  .members span{display:inline-block;padding:7px 14px;border-radius:980px;background:rgba(255,255,255,.75);
+    border:1px solid var(--line);font-size:14px;color:var(--ink);font-weight:500;}
+  .profile{padding:46px 0 38px;border-top:1px solid var(--line);}
+  .profile h3{font-size:24px;margin-bottom:6px;}
+  .profile .role{color:var(--ink-faint);font-size:15px;margin-bottom:18px;}
+  .profile p{color:var(--ink-soft);font-size:16px;margin-bottom:22px;}
+  .social{display:flex;gap:12px;flex-wrap:wrap;}
+  .social a{display:inline-flex;align-items:center;gap:9px;padding:12px 20px;border-radius:980px;
+    border:1.5px solid var(--line);color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;
+    transition:background .25s ease,transform .25s ease;background:rgba(255,255,255,.8);}
+  .social a:hover{transform:translateY(-2px);background:#fff;}
+  .quote{display:block;font-family:var(--serif);font-style:italic;
+    border-left:2px solid var(--line);padding-left:18px;margin:20px 0;
+    color:var(--ink-soft);font-size:17px;line-height:1.7;}
+  .social a svg{width:18px;height:18px;}
+  .thanks-end{padding:26px 0 110px;text-align:center;}
+  .thanks-end .heart{font-family:var(--serif);font-size:26px;font-weight:700;margin-bottom:24px;}
+  .rmacc{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.8);
+    margin-bottom:12px;overflow:hidden;}
+  .rmacc:last-of-type{border-bottom:1px solid var(--line);}
+  .rmacc summary{padding:18px 20px;}
+  .rm-head{display:flex;align-items:center;gap:16px;}
+  .rmacc .body{padding:0 20px 22px;}
+
+  /* ===== topbar with logo ===== */
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:space-between;
+    align-items:center;padding:12px 18px;pointer-events:none;}
+  .brand{pointer-events:auto;cursor:pointer;display:flex;align-items:center;gap:8px;
+    padding:6px 12px 6px 8px;border-radius:980px;background:rgba(255,255,255,.66);
+    backdrop-filter:blur(12px);border:1px solid var(--line);transition:background .3s ease;}
+  .brand img{width:26px;height:26px;object-fit:contain;display:block;}
+  .brand .bn{font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--ink);}
+  .brand .lw{display:none;}
+  body.dark-ui .brand{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.22);}
+  body.dark-ui .brand .bn{color:#fff;}
+  body.dark-ui .brand .ld{display:none;}
+  body.dark-ui .brand .lw{display:block;}
+  .topbar .home{pointer-events:auto;font-size:13px;font-weight:600;color:var(--ink-faint);
+    background:rgba(255,255,255,.66);backdrop-filter:blur(12px);padding:8px 15px;border-radius:980px;
+    border:1px solid var(--line);cursor:pointer;opacity:0;transition:opacity .4s ease;}
+  .topbar .home.show{opacity:1;}
+  body.dark-ui .topbar .home{color:rgba(255,255,255,.88);background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.22);}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;}
+  .reveal{opacity:1;transform:none;transition:none;}
+  .fader{transition:none;}
+  html{scroll-behavior:auto;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ INTRO ============ -->
+<section class="screen active" id="intro">
+  <div class="wrap">
+    <div class="hero">
+      <div class="reveal in"><span class="eyebrow">청년 미래 워크숍 · <2050년, 교실의 문을 열면></span></div>
+      <h1 class="display reveal in" style="margin-top:22px;">청년들이 그린 미래에<br>당신을 초대합니다.</h1>
+      <p class="lead reveal in" style="margin-top:26px;">저희는 <b>교권의 미래</b>를 상상했습니다.<br>맞히려고 하기 보다는, 그려보려고요.</p>
+      <div class="scroll-hint reveal in"><span class="dot"></span> 아래로 내려가며 읽어보세요</div>
+    </div>
+
+    <div class="block">
+      <div class="reveal"><span class="eyebrow">워크숍 주제 선정</span></div>
+      <h2 class="reveal">근래 가장 핫한 미래 이슈,<br>교권.</h2>
+      <p class="lead reveal">유튜브 <유치원 교사 이민지> 시리즈, 드라마 <참교육> 등에서처럼 최근 <b>교권</b>을 주제로 많은 논쟁이 이루어지고 있습니다. 또한 교권은 단순히 온라인 밈에 그치지 않고, 실제로 교육부 등 사회적으로 '교권보호국 설립'과 같은 실질적인 정책적 논쟁이 발생하는 매우 시국성 있고 무거운 사회적 주제이기에, 첫 워크숍 주제로 '교권'을 선정했습니다.</p>
+    </div>
+    
+    <div class="block">
+      <div class="reveal"><span class="eyebrow">무엇을 했나</span></div>
+      <h2 class="reveal">예측과 더불어,<br>상상입니다.</h2>
+      <p class="lead reveal">미래를 '정확하게' 맞히려 하는 것도 좋지만, 저희는 <b>지금 청년들이 교권의 미래를 어떻게 그리는지</b>, 그 상상 자체를 담았습니다. 체벌을 직접 겪은 마지막 세대이면서, 아직 학부모가 되지 않은 — 그 사이 어딘가에 선 우리의 시선으로요.</p>
+    </div>
+
+    <div class="block">
+      <div class="reveal"><span class="eyebrow">어떻게 봤나 · 네 개의 렌즈</span></div>
+      <h2 class="reveal">하나의 미래가 아니라,<br>네 개의 세계로.</h2>
+      <p class="lead reveal" style="margin-bottom:6px;">미래학에는 오래된 틀이 하나 있습니다. 미래를 예측할 때 네 갈래로 나누어 상상해보자는 것 — 계속 자라거나, 무너지거나, 완전히 바뀌거나, 멈춰 지키거나. 우리는 이 네 렌즈를 교권에 하나씩 씌워봤습니다.</p>
+      <div class="lenses">
+        <div class="lens reveal"><span class="sw" style="background:linear-gradient(135deg,#0c6347,#3ddc84)"></span><div><div class="lb">계속 자란다</div><div class="ds">지금 체제가 더 강해지는 쪽으로</div></div></div>
+        <div class="lens reveal"><span class="sw" style="background:linear-gradient(135deg,#4a1410,#d2402a)"></span><div><div class="lb">무너진다</div><div class="ds">떠받치던 제도가 서 있지 않는 쪽으로</div></div></div>
+        <div class="lens reveal"><span class="sw" style="background:linear-gradient(135deg,#1d2a78,#38d6ff)"></span><div><div class="lb">완전히 바뀐다</div><div class="ds">배움의 뜻 자체가 달라지는 쪽으로</div></div></div>
+        <div class="lens reveal"><span class="sw" style="background:linear-gradient(135deg,#6b4a14,#e5a534)"></span><div><div class="lb">멈춰 지킨다</div><div class="ds">성장을 내려놓고 가치를 택하는 쪽으로</div></div></div>
+      </div>
+      <p class="lead reveal" style="margin-top:24px;font-size:17px;">이 네 세계는 서로 우열이 없습니다. 더 좋은 미래도, 더 나쁜 미래도 아니에요. 각각의 세계 안에서 교권이 <b>어떤 모습이 되는지</b>를 볼 뿐입니다.</p>
+    </div>
+
+    <div class="cta-row reveal">
+      <button class="btn" onclick="go('present')">먼저, 지금 우리가 선 자리에서 <span class="arw">→</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRESENT ============ -->
+<section class="screen" id="present">
+  <div class="wrap">
+    <div class="top">
+      <div class="reveal in"><span class="eyebrow">출발점 · 지금의 교권</span></div>
+      <h2 class="reveal in" style="font-size:clamp(28px,7vw,44px);margin-top:16px;">미래로 가기 전에,<br>지금 여기서.</h2>
+      <p class="lead reveal in" style="margin-top:20px;">미래를 상상하기 전에 우리가 실제로 겪고 본 교권의 오늘을 먼저 풀어놨습니다. 여기서 나온 여섯 갈래가, 네 개의 미래를 그리는 재료가 되었습니다.</p>
+      <p style="margin-top:16px;font-size:14px;color:#e6e6ed;" class="reveal in">각 항목을 눌러 자세히 볼 수 있습니다.</p>
+    </div>
+
+    <div class="reveal" style="padding-top:26px;">
+      <details class="acc"><summary><div><div class="n">01</div><div class="at">지도의 수단과 권한</div><div class="aq">무엇으로, 어디까지 지도할 수 있나</div></div><span class="pm"></span></summary>
+        <div class="body">
+          <p>교과서 배부 일을 하며 학교에 들어갔던 한 사람은, 3·4학년 교실에서 아이가 교사의 옷과 손을 잡아당기고 때리는 장면을 봤습니다. 교사가 할 수 있는 말은 “하지 마세요”뿐이었고, 아이는 계속했습니다.</p>
+          <p>그런데 이 장면을 두고 스스로 되묻게 됩니다. <br> <span class="quote">“우리도 저 정도는 하지 않았나? 이걸 교권 침해라고 불러야 하나?”</span> 판단이 쉽지 않다는 것 자체가 지금의 상태를 보여줍니다.</p>
+          <p><span class="tag">재량권의 차이</span>공립은 민원을 사실상 받아들여야 하는 구조인 반면, 사립은 “맞지 않으면 다른 학교로 가시면 됩니다”가 가능합니다. 학교가 요구를 <b>끊어낼 수 있느냐</b>가 지도 권한의 실질을 가릅니다.</p>
+        </div>
+      </details>
+
+      <details class="acc"><summary><div><div class="n">02</div><div class="at">보호자의 개입</div><div class="aq">어떻게, 얼마나 들어오나</div></div><span class="pm"></span></summary>
+        <div class="body">
+          <p>“내가 못 가졌으니 내 아이만은”이라는 마음이 세대를 건너 작동합니다. 억압을 겪은 세대가 부모가 되면서, 자녀에게만은 그러지 않겠다는 다짐이 학교를 향한 요구로 번역됩니다.</p>
+          <p>시험지 채점 방식까지 학교로 요구가 들어오고, 민원을 넣는 것은 소수지만 그 힘이 교사를 압박합니다. 그리고 그 압박은 다시 아이에게 전이됩니다.</p>
+          <p><span class="tag">지역이라는 변수</span>경기 북부의 한 학교에서는 교사들이 스트레스를 거의 말하지 않았습니다. 그 지역 보호자들이 초등 교육에 크게 밀어붙이지 않았기 때문입니다. 즉, 같은 나라 안에서도 온도가 다른 것입니다.</p>
+        </div>
+      </details>
+
+      <details class="acc"><summary><div><div class="n">03</div><div class="at">따름의 근거</div><div class="aq">왜 따르고, 왜 따르지 않나</div></div><span class="pm"></span></summary>
+        <div class="body">
+          <p>한 취재 영상에서 학생들은 이렇게 말했습니다 — 학교에서 혐오 표현을 써도 <b>선생님들은 모르기 때문에 제지할 수 없다</b>고. 무시라기보다 문화의 격차에서 오는 자신감입니다.</p>
+          <p>반대 사례도 분명합니다. 생활기록부 관리가 걸린 학교에서는 아무도 자지 않고 교사의 말을 듣습니다. 권위가 인격이 아니라 <b>이해관계 위에 조건부로</b> 서 있는 셈입니다.</p>
+          <p><span class="tag">구조의 문제</span>교권 관련 대담에 학부모·학생·교수는 있었지만 정작 현장 교사는 없었습니다. 밖에서 1인 시위를 하던 교사가 겨우 들어와 발언했다는 이야기는, 이것이 개인의 문제가 아님을 보여줍니다.</p>
+        </div>
+      </details>
+
+      <details class="acc"><summary><div><div class="n">04</div><div class="at">두 권리의 무게중심</div><div class="aq">학생의 권리와 교사의 권한 사이</div></div><span class="pm"></span></summary>
+        <div class="body">
+          <p>과거에는 학생의 인권이 존중받지 못했고, 그로 인해 학교폭력도 뒤따랐습니다. 그 시절을 지나 지금은 학생을 섬세하게 챙깁니다.</p>
+          <p><b>문제는 그 무게가 옮겨가는 동안 교사를 지킬 장치는 함께 마련되지 않았다는 점입니다.</b> 책임은 그대로인데 보호는 비어 있는 상태 — 교권의 축소는 절대적이라기보다 <b>상대적</b>으로 일어났습니다.</p>
+        </div>
+      </details>
+
+      <details class="acc"><summary><div><div class="n">05</div><div class="at">배움의 출처와 신뢰</div><div class="aq">어디서 배우고, 무엇을 믿나</div></div><span class="pm"></span></summary>
+        <div class="body">
+          <p>코로나로 수업이 온라인으로 옮겨가자 학생들은 학교 수업과 인터넷 강의를 나란히 놓고 비교하게 됐습니다. 그 격차의 체감이 공교육 신뢰를 흔들었습니다.</p>
+          <p>신뢰가 흔들리면 사교육으로 옮겨가고, 그만큼 교실이 비고, 다시 신뢰가 떨어지는 순환이 생깁니다.</p>
+          <p><span class="tag">수시와 정시의 분화</span>수시를 준비하면 교사가 반드시 필요하지만, 정시로 가면 교사는 오히려 방해물이 됩니다. 등급제 개편으로 정시 비중이 커지면서, 같은 교실 안에 교사를 전혀 다르게 대하는 두 집단이 앉아 있게 됐습니다.</p>
+        </div>
+      </details>
+
+      <details class="acc"><summary><div><div class="n">06</div><div class="at">바깥 문화의 유입</div><div class="aq">교실 밖 문화가 안으로</div></div><span class="pm"></span></summary>
+        <div class="body">
+          <p>인터넷에서는 무슨 말을 해도 아무도 막지 않습니다. 그 경험이 <b>“막는 사람이 없다”</b>는 학습이 되어 현실로 옮겨옵니다.</p>
+          <p>예전에는 현실에서 예절을 배우고 그것을 온라인으로 가져갔다면, 지금은 순서가 뒤집혔다는 이야기가 나왔습니다. 사회화의 장소가 바뀐 것입니다.</p>
+          <p><span class="tag">닫힌 또래망</span>'디스코드'나 '로블록스'처럼 초대받아야 들어가는 공간에서 아이들이 놉니다. 우연한 만남이 사라지고, 자기들끼리만 통하는 말과 규범이 자랍니다. 교사가 그 안을 들여다보기는 더 어려워집니다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="cta-row reveal">
+      <div class="navrow">
+        <button class="btn on-dark" onclick="go('lobby')">이제, 네 개의 미래로 <span class="arw">→</span></button>
+        <button class="btn ghost on-dark" onclick="go('intro')">← 처음으로</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LOBBY ============ -->
+<section class="screen" id="lobby">
+  <div class="wrap">
+    <div class="top">
+      <div class="reveal in"><span class="eyebrow">2050년으로 · 네 개의 문</span></div>
+      <h2 class="reveal in">어느 문으로든,<br>먼저 들어가세요.</h2>
+      <p class="sub reveal in">순서는 없습니다. 다녀온 문은 불이 켜집니다.<br><b style="color:#fff;">네 세계를 모두 지나야, 마지막 이야기가 열립니다.</b></p>
+    </div>
+    <div class="doors">
+      <div class="door d1" onclick="enter(1)"><div class="glow"></div>
+        <div class="dt"><div class="teaser">계속 자라는 세계</div></div>
+        <div class="state" data-state><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>들어가기</span></div></div>
+      <div class="door d2" onclick="enter(2)"><div class="glow"></div>
+        <div class="dt"><div class="teaser">무너진 세계</div></div>
+        <div class="state" data-state><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>들어가기</span></div></div>
+      <div class="door d3" onclick="enter(3)"><div class="glow"></div>
+        <div class="dt"><div class="teaser">완전히 바뀐 세계</div></div>
+        <div class="state" data-state><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>들어가기</span></div></div>
+      <div class="door d4" onclick="enter(4)"><div class="glow"></div>
+        <div class="dt"><div class="teaser">멈춰 서서 지켜내는 세계</div></div>
+        <div class="state" data-state><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>들어가기</span></div></div>
+    </div>
+    <div class="prog"><span id="progText">0 / 4 지나옴</span></div>
+    <div class="lobby-final" id="lobbyFinal">
+      <div class="fl">네 개의 문이 모두 열렸습니다.</div>
+      <button class="btn on-dark" onclick="go('final')">지나온 미래들을 돌아보기 <span class="arw">→</span></button>
+    </div>
+    <div class="navrow">
+      <button class="btn ghost on-dark" onclick="go('present')">← 현재의 교권으로</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen world" id="w1" style="background:radial-gradient(120% 60% at 80% 0%,rgba(61,220,132,.22),transparent 55%),linear-gradient(170deg,#063d2d,#0a5c43 55%,#0c6347);">
+  <div class="wrap">
+    <div class="wtop">
+      <div class="teaser-eyebrow reveal in">계속 자라는 세계</div>
+      <div class="essence reveal in">지금의 흐름이<br>그대로, 더 세게.<br><span style="color:rgba(255,255,255,.7);">전체는 계속 자라지만,<br>자라는 곳과 밀려난 곳이 갈린다.</span></div>
+      <div class="year reveal in">시점: 2050년</div>
+      <div class="wdesc reveal in">이 세계는 멈추지 않고 성장한다. 문제는 더 좋은 제도와 기술로 풀 수 있고, 지금 체제는 고치면 굴러간다고 믿는다. 배움의 자리는 여전히 사회의 중심이고, 교육은 더 똑똑하고 효율적으로 발전한다.</div>
+    </div>
+    <div class="ovw reveal">
+      <div class="qbox">
+        <div class="qlabel">이 세계를 정한 질문</div>
+        <div class="q">무엇이 계속 성장했나?</div>
+        <div class="alist"><div class="ai"><span class="bull"></span><div class="txt"><b>인서울 쏠림</b> — 전체 학생 수는 줄지만 특정 소수로의 집중은 오히려 심해집니다. 지방대와 직업계는 통합되거나 사라집니다.</div></div>
+<div class="ai"><span class="bull"></span><div class="txt"><b>입시 사교육 비용</b> — 해마다 최대치를 새로 씁니다.</div></div>
+<div class="ai"><span class="bull"></span><div class="txt"><b>공교육과 사교육의 격차</b> — 좋은 교육을 받은 층이 계속 앞서 나가며 불평등이 굳어집니다.</div></div></div>
+        <div class="how">쏠림의 <b>대상</b>은 바뀔 수 있습니다. 의대가 아니라 특정 기업이나 계약학과일 수도 있고, 학벌보다 ‘어느 회사 출신인가’가 지위가 될 수도 있습니다. 그러나 <b>소수로 쏠린다는 구조 자체</b>는 그대로 유지됩니다.</div>
+      </div>
+    </div>
+    <div class="axes-label reveal">그래서 교권은 — 세 가지 층위</div>
+    <div class="reveal">
+      <details class="acc"><summary><div><div class="at">가르치는 사람의 권한</div><div class="aq">어떤 권한으로, 어디까지 지도하나</div></div><span class="pm"></span></summary><div class="body"><p>핵심은 <b>양극화</b>입니다. 스타성 있는 교사와 학교로 팬덤처럼 몰리고, 몰리는 곳의 교사는 사람이 아니라 브랜드가 됩니다. 그 매력은 분명합니다 — 좋은 수업이 지역과 상관없이 전국 어디에서나 닿고, 능력이 곧 보상이 되는 세계니까요.</p><p>밀려난 곳이 반드시 불행한 것도 아닙니다. 아무도 통제할 필요가 없어져 오히려 수평적이고 자율적이 된 교실이 있고, 교사가 희소해진 지방에서는 남은 한 사람이 되레 귀하게 존중받기도 합니다.</p><p><span class='tag'>예절의 사교육화</span>공교육이 사회화 기능을 잃으면서 “어떻게 행동할지”를 돈 주고 배우는 시장이 커집니다. 다만 여기서 예절은 도덕이라기보다 <b>책잡히지 않을 에티켓</b>에 가깝고, 학원 간 격차가 곧 경제력 격차가 됩니다.</p><p>한편 학업 의지를 잃은 학생이 늘면 교사의 지도 의지도 함께 꺾입니다. 특성화고 교사는 취업처의 질을 감당하지 못해 우선 전문대로 보내며 책임을 넘기기도 합니다.</p></div></details>
+<details class="acc"><summary><div><div class="at">보호자의 개입</div><div class="aq">어떻게, 얼마나 개입하나</div></div><span class="pm"></span></summary><div class="body"><p><span class='tag'>개입의 근원 · 시장 서열</span>이 세계에서 보호자를 움직이는 힘은 시장의 줄 세우기입니다. 더 좋은 자리로 올라가려는 경쟁이 개입을 낳습니다.</p><p>우리 세대가 학부모가 될 즈음 두 갈래가 팽팽합니다. 진상 학부모를 비웃으며 거리를 두는 쪽과, ‘굳이 낳기로 선택한’ 만큼 더 몰입하는 쪽.</p><p>수렴하는 결론은 이렇습니다 — 민원을 넣는 사람이 많아지는 게 아니라, <b>민원을 넣는 소수의 목소리가 더 세진다</b>는 것.</p></div></details>
+<details class="acc"><summary><div><div class="at">안과 밖의 문화</div><div class="aq">온라인·또래 문화와 어떤 관계인가</div></div><span class="pm"></span></summary><div class="body"><p>양극화가 또래 사이에서도 관철됩니다. 급을 나눠 자기들끼리만 소통하고, 출신 학교가 소속의 표지가 됩니다. 대학 잠바에 출신 고교까지 적는 지금의 풍경이 더 어린 나이로 내려가는 셈입니다.</p><p>동창이나 동급생이라는 말은 옅어지고 ‘개인적으로 선택한 친구’만 남습니다. 여유가 있는 층은 사립·홈스쿨링으로 아예 이탈해, 학교 자체가 출신으로 갈라집니다.</p></div></details>
+
+    </div>
+    <div class="shade reveal"><div class="sl">더 좋은 것도 더 나쁜 것도 아닙니다. 누군가에게는 능력이 온전히 보상받는 세계이고, 누군가에게는 출발선에서 이미 갈린 세계입니다.</div></div>
+    <div class="navrow reveal">
+      <button class="btn on-dark" onclick="go('lobby')">← 다른 미래도 탐험하기</button>
+      <button class="btn ghost on-dark" onclick="go('present')">현재의 교권 다시 보기</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen world" id="w2" style="background:radial-gradient(100% 60% at 20% 100%,rgba(210,64,42,.3),transparent 55%),linear-gradient(165deg,#160707,#2e0c0c 55%,#4a1410);">
+  <div class="wrap">
+    <div class="wtop">
+      <div class="teaser-eyebrow reveal in">무너진 세계</div>
+      <div class="essence reveal in">떠받치던 제도가<br>더는 서 있지 않다.<br><span style="color:rgba(255,255,255,.7);">무너진 자리에서,<br>사람들은 각자 살길을 찾는다.</span></div>
+      <div class="year reveal in">시점: 2050년</div>
+      <div class="wdesc reveal in">이 세계는 무너졌다. 저출생이든 교직 이탈이든 신뢰 붕괴이든 — 무엇이 원인이든 배움을 떠받치던 제도 자체가 더는 예전처럼 서 있지 않다. 사람들은 무너진 자리에서 각자의 살길을 찾는다.</div>
+    </div>
+    <div class="ovw reveal">
+      <div class="qbox">
+        <div class="qlabel">이 세계를 정한 질문</div>
+        <div class="q">무엇이 무너졌나?</div>
+        <div class="alist"><div class="ai"><span class="bull"></span><div class="txt"><b>교사가 설 자리</b> — 성적만 좇는다면 온라인으로 충분해지고, 사람과 사람 사이에서 오가던 것들이 통째로 빠집니다.</div></div>
+<div class="ai"><span class="bull"></span><div class="txt"><b>교육부</b> — 가르칠 아이가 줄면서 “거기에 세금을 써야 하나”라는 물음이 커지고, 그 기능은 흩어지거나 <b>돌봄부</b>로 넘어갑니다.</div></div></div>
+        <div class="how">초등만 의무로 남고 그 이후는 각자의 몫이 됩니다. 어느 군에는 학교가 단 하나뿐이고, 그마저 요양원과 붙어 있어 노인이 아이를 가르치기도 합니다.</div>
+      </div>
+    </div>
+    <div class="axes-label reveal">그래서 교권은 — 세 가지 층위</div>
+    <div class="reveal">
+      <details class="acc"><summary><div><div class="at">가르치는 사람의 권한</div><div class="aq">어떤 권한으로, 어디까지 지도하나</div></div><span class="pm"></span></summary><div class="body"><p>공교육의 틀이 사라진 자리에서 가르치는 일은 파편화됩니다. 교육자가 사라진 뒤 부패가 자리 잡은 다른 나라의 사례가 이야기 중에 겹쳐 언급되기도 했습니다.</p><p><span class='tag'>개입의 근원 · 희소성</span>교사가 드물어진 만큼 남은 이는 귀하게 대접받습니다. 여기서 개입은 압박이 아니라 오히려 <b>저자세</b>가 됩니다 — “우리 애 좀 잘 봐주십시오”라는.</p><p>다만 그 존경은 안정된 권위와는 다릅니다. 자신이 배우지 못했다는 감각에서 오는 떠받듦은, 형태만 바뀐 또 하나의 불균형일 수 있습니다.</p></div></details>
+<details class="acc"><summary><div><div class="at">보호자의 개입</div><div class="aq">어떻게, 얼마나 개입하나</div></div><span class="pm"></span></summary><div class="body"><p>떠날 수 있던 집의 아이들은 이미 이 자리에 없습니다. 남은 것은 떠나지 못한 아이들이고, 바깥에서는 그들을 ‘여기서 배운 아이’라 부릅니다 — 옅은 그늘이 밴 말로.</p><p>중산층 이상은 홈스쿨링이나 학부모 공동체로 옮겨갑니다. 수학을 잘하는 부모가 모여 가르치고, 회사에서 일하는 어른이 멘토가 되기도 합니다.</p><p>국가가 제공하는 축소된 학교에는 기숙사와 셔틀이 딸려 오지만, 그만큼 아이들의 행동 반경은 좁아집니다.</p></div></details>
+<details class="acc"><summary><div><div class="at">안과 밖의 문화</div><div class="aq">온라인·또래 문화와 어떤 관계인가</div></div><span class="pm"></span></summary><div class="body"><p>세계관 자체가 갈라집니다. 어디서 누구에게 배웠는가에 따라 쓰는 말도 생각의 결도 달라져 서로 통하지 않습니다. SNS마저 계층별로 나뉘어 코드가 있어야 들어갈 수 있습니다.</p><p>그런데 이상하게 조용합니다. 비교할 옆 학교도, 민원을 넣을 상급 기관도 없어졌으니까요. <b>다툴 상대가 사라진 세계의 평화</b>입니다. 너무 다른 세계에 사는 사람끼리는 질투도 성립하지 않습니다.</p></div></details>
+
+    </div>
+    <div class="shade reveal"><div class="sl">경쟁의 끝을 반기는 이도, 소박한 삶을 되찾은 이도 있습니다. 무너짐이 곧 최악은 아닙니다 — 누구의 하루를 따라가느냐에 달렸을 뿐.</div></div>
+    <div class="navrow reveal">
+      <button class="btn on-dark" onclick="go('lobby')">← 다른 미래도 탐험하기</button>
+      <button class="btn ghost on-dark" onclick="go('present')">현재의 교권 다시 보기</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen world" id="w3" style="background:radial-gradient(110% 60% at 85% 8%,rgba(56,214,255,.24),transparent 55%),linear-gradient(170deg,#070a26,#131c54 55%,#1d2a78);">
+  <div class="wrap">
+    <div class="wtop">
+      <div class="teaser-eyebrow reveal in">완전히 바뀐 세계</div>
+      <div class="essence reveal in">‘배움’이라는 말의<br>뜻이 바뀌었다.<br><span style="color:rgba(255,255,255,.7);">지식은 AI가 쥐고,<br>남은 질문은 하나 —<br>그래서 너는 어떻게 살 것인가.</span></div>
+      <div class="year reveal in">시점: 2050년</div>
+      <div class="wdesc reveal in">이 세계는 통째로 바뀌었다. AI가 가르치는 일의 대부분을 맡으면서 ‘가르친다’와 ‘가르치는 사람’이라는 말의 뜻 자체가 달라졌다. 사람 교육자는 전혀 다른 무언가가 되었거나, 사람과 AI가 나란히 가르친다.</div>
+    </div>
+    <div class="ovw reveal">
+      <div class="qbox">
+        <div class="qlabel">이 세계를 정한 질문</div>
+        <div class="q">무엇이 결정적으로 바뀌었나?</div>
+        <div class="alist"><div class="ai"><span class="bull"></span><div class="txt"><b>가르친다는 말의 뜻</b> — AI가 가르치는 일의 대부분을 맡으면서, ‘가르친다’와 ‘가르치는 사람’이 가리키는 것이 통째로 달라졌습니다.</div></div>
+<div class="ai"><span class="bull"></span><div class="txt"><b>외우는 일의 쓸모</b> — 아이마다 하나씩 지급된 AI가 지식을 쥐고 있어, 지식을 머리에 담아두는 일 자체가 의미를 잃습니다.</div></div>
+<div class="ai"><span class="bull"></span><div class="txt"><b>평가의 기준</b> — 시험이 지면을 벗어납니다. 외운 것을 겨루는 대신 말하기와 글쓰기, ‘나만의 이야기’로 사람을 봅니다.</div></div></div>
+        <div class="how">기회는 넓어졌습니다. 예전에는 사교육에 가야 물을 수 있던 질문을 이제 누구나 언제든 물을 수 있으니까요. 대신 배워야 할 이유는 스스로 찾아야 합니다.</div>
+      </div>
+    </div>
+    <div class="axes-label reveal">그래서 교권은 — 세 가지 층위</div>
+    <div class="reveal">
+      <details class="acc"><summary><div><div class="at">가르치는 사람의 권한</div><div class="aq">어떤 권한으로, 어디까지 지도하나</div></div><span class="pm"></span></summary><div class="body"><p>외울 것이 사라지자 지식을 나르던 교사의 일이 통째로 바뀝니다. 인간 교사는 과목을 가르치는 사람이 아니라 <b>어떻게 살 것인가</b>를 함께 묻는 존재가 됩니다.</p><p><span class='tag'>스승과 문파</span>사람들은 이런 이를 옛말을 빌려 ‘문파(門派)’라 부르기 시작합니다. 어떤 스승을 따르는가가 곧 어떤 사람이 되려는가입니다. 스승은 답을 주는 대신 되묻고, 제자가 물으면 자신도 다시 생각합니다.</p><p>스승이 되는 길은 좁아졌고 그래서 더 귀해집니다. 한편 공교육은 ‘AI를 어떻게 아이에게 맞출까’로 옮겨가, 개발자와 엔지니어를 더 많이 필요로 합니다.</p></div></details>
+<details class="acc"><summary><div><div class="at">보호자의 개입</div><div class="aq">어떻게, 얼마나 개입하나</div></div><span class="pm"></span></summary><div class="body"><p><span class='tag'>개입의 근원 · 달라진 관계</span>아이 곁에 늘 있는 AI를 통해 보호자는 이제 무엇이든 볼 수 있습니다. 예전에는 아이의 말만 믿어야 했던 자리에, 확인할 수 있다는 조건이 들어섰습니다.</p><p>그러자 개입의 대상이 달라집니다. 성적을 채근하던 자리에 “이 아이가 어떤 사람이 되어 가는가”라는 물음이 들어섭니다. 무엇을 배움이라 부르는지가 바뀌자, 부모가 들여다보는 것도 함께 바뀐 것입니다.</p></div></details>
+<details class="acc"><summary><div><div class="at">안과 밖의 문화</div><div class="aq">온라인·또래 문화와 어떤 관계인가</div></div><span class="pm"></span></summary><div class="body"><p>무엇이든 즉시 답해 주는 세계입니다. 그래서 역설적으로, 아무도 답해 주지 않는 질문 하나를 스스로 오래 품는 힘이 귀해집니다.</p><p>지능은 누구나 빌려 쓸 수 있게 되었으니, 남는 것은 사람다움 쪽입니다. 자신이 어떤 사람인지를 세우고 그것을 밀고 나가는 일이 또래 사이에서도 자산이 됩니다.</p></div></details>
+
+    </div>
+    <div class="shade reveal"><div class="sl">기회는 넓어졌지만, 스스로 묻지 않는 이에게는 아무것도 남지 않습니다. 배움의 뜻이 바뀐 세계에서 마지막 배움은 ‘질문을 품는 일’인지도 모릅니다.</div></div>
+    <div class="navrow reveal">
+      <button class="btn on-dark" onclick="go('lobby')">← 다른 미래도 탐험하기</button>
+      <button class="btn ghost on-dark" onclick="go('present')">현재의 교권 다시 보기</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen world" id="w4" style="background:radial-gradient(110% 60% at 25% 4%,rgba(229,165,52,.24),transparent 55%),linear-gradient(170deg,#241606,#4a3210 55%,#6b4a14);">
+  <div class="wrap">
+    <div class="wtop">
+      <div class="teaser-eyebrow reveal in">멈춰 서서 지켜내는 세계</div>
+      <div class="essence reveal in">더 자랄 수 있었지만,<br>자라지 않기로<br>함께 정했다.<br><span style="color:rgba(255,255,255,.7);">지킬 가치는 하나 —<br>함께 사는 법.</span></div>
+      <div class="year reveal in">시점: 2050년</div>
+      <div class="wdesc reveal in">이 세계는 멈춰 서서 지켜내기로 했다. 성장과 효율보다 더 중요한 가치가 있다고 믿고, 사회가 그것을 함께 합의해 지킨다. 가르치는 사람을 ‘서비스 제공자’가 아니라 사회가 지켜야 할 존재로 다시 세운다.</div>
+    </div>
+    <div class="ovw reveal">
+      <div class="qbox">
+        <div class="qlabel">이 세계를 정한 질문</div>
+        <div class="q">어떤 핵심 가치를 지키나?</div>
+        <div class="alist"><div class="ai"><span class="bull"></span><div class="txt"><b>배려와 조화, 공존</b> — 여러 후보가 오간 끝에 ‘같이 잘 사는 것’으로 모였습니다.</div></div>
+<div class="ai"><span class="bull"></span><div class="txt"><b>사회를 유지하는 일 그 자체</b> — 생산과 일의 많은 부분을 기계가 맡게 된 뒤, 무엇을 더 이룰 것인가보다 <b>어떻게 함께 살아갈 것인가</b>가 앞자리에 놓입니다.</div></div>
+<div class="ai"><span class="bull"></span><div class="txt"><b>지식(IQ)보다 함께 지내는 힘(EQ)</b> — 무엇을 아는가보다 곁에 있는 사람과 어떻게 지내는가가 사람을 재는 기준이 됩니다.</div></div></div>
+        <div class="how">중요한 것은 <b>어쩔 수 없이</b> 멈춘 게 아니라는 점입니다. 더 자랄 수 있었지만 자라지 않기로 <b>함께 정한</b> 세계 — 무너져서 멈춘 세계와는 여기서 갈립니다.</div>
+      </div>
+    </div>
+    <div class="axes-label reveal">그래서 교권은 — 세 가지 층위</div>
+    <div class="reveal">
+      <details class="acc"><summary><div><div class="at">가르치는 사람의 권한</div><div class="aq">어떤 권한으로, 어디까지 지도하나</div></div><span class="pm"></span></summary><div class="body"><p>교실에 시간표는 있지만 과목은 없습니다. 대신 다 같이 놀이를 합니다. 차례를 기다리는 법, 진 사람을 다독이는 법, 이긴 뒤에도 우쭐대지 않는 법을 윷과 보드게임 속에서 익힙니다.</p><p>교사는 가르치는 사람이라기보다 <b>놀이를 이끄는 사람</b>에 가깝습니다. 그의 권위는 규칙을 쥔 데서 나옵니다 — 누구도 이 조화를 깨지 못하게 하는 힘.</p><p><span class='tag'>지도의 방식</span>때리거나 벌점을 매기는 대신, 슬쩍 등을 미는 방식이 쓰입니다. 눈치를 주듯 은근하게 행동을 이끄는 쪽이 조화를 덜 흔들기 때문입니다.</p><p>잘 노는 사람이 곧 잘 가르치는 사람이 되기도 합니다. 지금은 곁길로 여겨지던 재주를 가진 이들이 교단에 서는 세계입니다.</p></div></details>
+<details class="acc"><summary><div><div class="at">보호자의 개입</div><div class="aq">어떻게, 얼마나 개입하나</div></div><span class="pm"></span></summary><div class="body"><p><span class='tag'>개입의 근원 · 사회적 합의</span>이 세계에서는 어른도 배움의 대상입니다. 아이만 잘 지내면 되는 게 아니라 모두가 잘 지내야 하므로, 보호자도 교실 뒤에 함께 앉아 놀이에 참가합니다.</p><p>마음에 들지 않는 일이 있어도 민원은 오지 않습니다. 불만은 조화를 흔들 뿐이라고, <b>모두가 그렇게 합의했으므로</b>.</p></div></details>
+<details class="acc"><summary><div><div class="at">안과 밖의 문화</div><div class="aq">온라인·또래 문화와 어떤 관계인가</div></div><span class="pm"></span></summary><div class="body"><p>놀이에도 위계는 생깁니다. 게임에는 지는 사람이 있게 마련이니까요. 그래서 지는 법과 감수하는 법, 돌아가며 이기게 하는 법을 함께 익힙니다.</p><p>놀이별로 적성이 갈립니다. 심리를 읽는 쪽, 몸을 쓰는 쪽, 손이 야무진 쪽. 어릴 때는 다 같이 섞여 여러 놀이를 해보고, 자라면서 자기 놀이를 찾아갑니다.</p></div></details>
+
+    </div>
+    <div class="shade reveal"><div class="sl">평화롭습니다. 다만 그 평화가 자발적인 선택인지, 아무도 이탈할 수 없는 규율인지 — 그 경계를 아이들은 아직 묻지 않습니다.</div></div>
+    <div class="navrow reveal">
+      <button class="btn on-dark" onclick="go('lobby')">← 다른 미래도 탐험하기</button>
+      <button class="btn ghost on-dark" onclick="go('present')">현재의 교권 다시 보기</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL ============ -->
+<section class="screen" id="final">
+  <div class="wrap">
+    <div class="top">
+      <div class="reveal in"><span class="eyebrow">네 개의 문을 모두 지나</span></div>
+      <h2 class="reveal in" style="font-size:clamp(28px,7vw,44px);margin-top:16px;">당신이 지나온<br>네 개의 미래.</h2>
+      <p class="lead reveal in" style="margin-top:20px;">사실 이 네 세계에는 이름이 있었습니다. 미래학자 Jim Dator가 정리한, 어떤 것이든 그 미래가 갈리는 네 갈래.</p>
+    </div>
+
+    <div class="reveal-map reveal">
+    <details class="acc rmacc">
+        <summary>
+          <div class="rm-head">
+            <span class="sw" style="background:linear-gradient(135deg,#0c6347,#3ddc84)"></span>
+            <div><div class="teaser">계속 자라는 세계</div><div class="label">지속성장 · Continued Growth</div></div>
+          </div>
+          <span class="pm"></span>
+        </summary>
+        <div class="body">
+          <p><span class="tag">세계관 · 세상은 어떻게 굴러가나</span>세계는 본질적으로 나아지는 시스템이고, 성장은 자연스럽고 가능하며 좋은 것이다. 자원의 한계는 인간의 기술과 창의로 계속 돌파된다.</p>
+          <p><span class="tag">앎 · 무엇을 안다고 하나</span>좋은 데이터와 모델, 전문가의 판단으로 문제는 풀린다. 거의 모든 정부와 교육 체제가 공식적으로 채택한 미래이기도 하다.</p>
+          <p><span class="tag">당위 · 무엇을 해야 하나</span>경제를 계속 키우고 체제를 정교하게 다듬는 것이 우리의 임무이자 선(善)이다.</p>
+        </div>
+      </details>
+      <details class="acc rmacc">
+        <summary>
+          <div class="rm-head">
+            <span class="sw" style="background:linear-gradient(135deg,#4a1410,#d2402a)"></span>
+            <div><div class="teaser">무너진 세계</div><div class="label">붕괴 · Collapse</div></div>
+          </div>
+          <span class="pm"></span>
+        </summary>
+        <div class="body">
+          <p><span class="tag">세계관 · 세상은 어떻게 굴러가나</span>세계는 유한하고 취약하며 과도하게 확장돼 있다. 복잡하게 얽힌 시스템일수록 부서지기 쉽고, 변화는 불연속적·파국적일 수 있다.</p>
+          <p><span class="tag">앎 · 무엇을 안다고 하나</span>지금의 체제가 지속 불가능한 토대 위에 서 있다는 자각. 생태학과 문명 붕괴의 역사가 근거가 된다.</p>
+          <p><span class="tag">당위 · 무엇을 해야 하나</span>하나로 모이지 않는다. 붕괴를 대비하고 살아남는 것이 의무인 사람도, 경쟁의 끝을 오히려 반기는 사람도 있다.</p>
+        </div>
+      </details>
+      <details class="acc rmacc">
+        <summary>
+          <div class="rm-head">
+            <span class="sw" style="background:linear-gradient(135deg,#6b4a14,#e5a534)"></span>
+            <div><div class="teaser">멈춰 서서 지켜내는 세계</div><div class="label">보존 · Discipline</div></div>
+          </div>
+          <span class="pm"></span>
+        </summary>
+        <div class="body">
+          <p><span class="tag">세계관 · 세상은 어떻게 굴러가나</span>한계는 실재하지만 그 응답은 혼돈이 아니라 질서다. 세계는 물질적 축적보다 더 중요한 근본 가치를 중심으로 조직되어야 한다.</p>
+          <p><span class="tag">앎 · 무엇을 안다고 하나</span>지식이 그 핵심 가치에 닻을 내린다. 생태적 한계일 수도, 문화적 지혜일 수도 있다.</p>
+          <p><span class="tag">당위 · 무엇을 해야 하나</span>네 미래 중 당위가 가장 강하다. 우리는 그 가치를 중심으로 스스로를 규율해야 한다.</p>
+        </div>
+      </details>  
+      <details class="acc rmacc">
+        <summary>
+          <div class="rm-head">
+            <span class="sw" style="background:linear-gradient(135deg,#1d2a78,#38d6ff)"></span>
+            <div><div class="teaser">완전히 바뀐 세계</div><div class="label">변형 · Transformation</div></div>
+          </div>
+          <span class="pm"></span>
+        </summary>
+        <div class="body">
+          <p><span class="tag">세계관 · 세상은 어떻게 굴러가나</span>기술이 현실의 범주 자체를 다시 만든다. 인간·자연·노동·배움처럼 주어진 것으로 여겨지던 것들이 새로 정의된다. 연속이 아니라 단절.</p>
+          <p><span class="tag">앎 · 무엇을 안다고 하나</span>가속하는 기술과 지능 자체의 재구성. 무엇을 안다는 것의 의미가 함께 바뀐다.</p>
+          <p><span class="tag">당위 · 무엇을 해야 하나</span>그 변화를 두려워하기보다 환영하고, 새 형태로 나아간다.</p>
+        </div>
+      </details>  
+    </div>
+
+    <div class="frame-block reveal">
+      <div class="big-line">그래서, 무엇이 보였나.</div>
+      <p>네 세계를 지나오며 드러난 건 “교권이 세지느냐 약해지느냐”가 아니었습니다. 그보다 — 교권이 <b>어디서 나오는가</b>가 세계마다 근본적으로 다르다는 것이었죠. 시장의 줄 세우기에서, 희소함에서, 달라진 관계에서, 함께한 합의에서.</p>
+      <p>같은 질문을 네 개의 다른 세계에 던졌더니, ‘권위의 원천’이라는 교권의 속살이 드러난 셈입니다.</p>
+    </div>
+
+<div class="srcwrap reveal">
+  <div class="srclabel">권위는 어디서 나오는가</div>
+        <div class="srcgrid">
+
+          <div class="srcrow">
+            <span class="sw" style="background:linear-gradient(135deg,#0c6347,#3ddc84)"></span>
+            <div>
+              <div class="w">계속 자라는 세계</div>
+              <div class="src">제도·전문성<br>＋ 시장 서열</div>
+            </div>
+            <div class="one">팬덤화와 양극화. 몰리는 곳의 교사는 브랜드가 되고, 밀려난 곳에서는 지도 의지 자체가 꺾인다.</div>
+          </div>
+
+          <div class="srcrow">
+            <span class="sw" style="background:linear-gradient(135deg,#4a1410,#d2402a)"></span>
+            <div>
+              <div class="w">무너진 세계</div>
+              <div class="src">희소성</div>
+            </div>
+            <div class="one">공교육과 교육부가 무너진 자리에서 남은 교사가 귀해진다. 존경은 받지만, 그 존경은 안정된 권위와 다르다.</div>
+          </div>
+
+          <div class="srcrow">
+            <span class="sw" style="background:linear-gradient(135deg,#1d2a78,#38d6ff)"></span>
+            <div>
+              <div class="w">완전히 바뀐 세계</div>
+              <div class="src">인간성 ·<br>삶의 안내</div>
+            </div>
+            <div class="one">AI가 지식을 맡자, 인간 교사는 '어떻게 살 것인가'를 함께 묻는 스승으로 다시 정의된다.</div>
+          </div>
+
+          <div class="srcrow">
+            <span class="sw" style="background:linear-gradient(135deg,#6b4a14,#e5a534)"></span>
+            <div>
+              <div class="w">멈춰 지키는 세계</div>
+              <div class="src">사회적 합의 ·<br>규칙의 관장</div>
+            </div>
+            <div class="one">조화와 공존을 지키는 놀이의 진행자로서, 규칙을 쥔 데서 권한이 회복된다.</div>
+          </div>
+
+        </div>
+      </div>
+    
+    <div class="frame-block reveal" style="padding-top:0;border-top:none;">
+      <div class="big-line">예측보다는, 상상에 집중.</div>
+      <p>맞고 틀리고를 가리려는 게 아니었습니다. 지금 청년들이 교권의 미래를 어떻게 상상하는지 — 그 상상 자체를 남기고 싶었습니다. 우리가 직접 그렸다는 것, 그 자체로 의미가 있다고 믿으면서요.</p>
+    </div>
+
+    <div class="credit reveal">
+      <b>방법론</b> <br>Jim Dator의 ‘네 가지 대안 미래(Four Generic Futures)’ 기반 워크숍<br>
+      <b>참고 문헌</b> <br>Dator, J. (2019). Alternative futures at the Manoa School. In Jim Dator: A Noticer in Time: Selected work, 1967-2018 (pp. 37-54). Cham: Springer International Publishing.<br>
+      <b>워크숍 일시</b> <br>2026년 7월 5일<br>
+      <b>워크숍 장소</b> <br>WTS 원투스픽 자기계발센터<br>
+      <br>워크숍 기록을 바탕으로 재구성함.
+    </div>
+
+    <div class="profile reveal">
+      <h3>모레오</h3>
+      <div class="role">기획 · 진행</div>
+      <div class="members" style="margin-top:18px;">
+        <span>김정헌</span><span>나영선</span><span>나호현</span><span>양새람</span>
+        <span>양우성</span><span>임서진</span><span>임채림</span><span>최서현</span>
+      </div>
+      <blockquote class="quote">"함께 미래의 가능성들을 찾고, 희망을 행동으로 바꾸는 모레오"</blockquote>
+      <p><br><b>사단법인 미래학회 청년·미래세대특별위원회</b>의 활동명인 ‘모레오(More-O)’는 미래란 멀고 거창한 것이 아니라, 우리의 <b>‘내일모레’처럼 가까이에서 이미 시작되고 있다</b>는 의미를 담고 있습니다.</p>
+      <div class="social">
+        <a href="https://koreafutures.net" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.8 3.8 9S14.5 18.3 12 21c-2.5-2.7-3.8-5.8-3.8-9S9.5 5.7 12 3z"/></svg>
+          미래학회
+        </a>
+        <a href="https://www.instagram.com/__more_o__futures/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          Instagram
+        </a>
+        <a href="https://www.youtube.com/@more_o__futures" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
+          YouTube
+        </a>
+        <a href="https://open.spotify.com/show/2ny1QBRnJ6RnYdxAfvJlMl?si=4745bc0d65254e70&nd=1&dlsi=3efbeff0ce78486b" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9.3"/><path d="M7.3 9.5c3.1-.85 6.6-.5 9.4 1"/><path d="M8 12.6c2.5-.65 5.4-.35 7.7.9"/><path d="M8.7 15.5c2-.5 4.2-.28 6 .7"/></svg>          Spotify
+        </a>
+      </div>
+    </div>
+
+    <div class="thanks-end reveal">
+      <div class="heart"><b>함께 미래를 그려주셔서 고맙습니다.<br></div>
+      <div class="navrow" style="justify-content:center;">
+        <button class="btn ghost" onclick="go('lobby')">← 로비로</button>
+        <button class="btn ghost" onclick="go('intro')">처음으로</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="fader" id="fader"></div>
+        
+<div class="toast" id="toast">
+  <div class="tt" id="toastT"></div>
+  <div class="ts" id="toastS"></div>
+  <div class="bars" id="toastB"><i></i><i></i><i></i><i></i></div>
+</div>
+
+<div class="celebrate" id="celebrate">
+  <div id="cfx"></div>
+  <div class="cin">
+    <div class="ring"><b></b><b></b><b></b><b></b></div>
+    <div class="ct">네 개의 문이<br>모두 열렸습니다.</div>
+    <div class="cs">계속 자라는 세계, 무너진 세계, 완전히 바뀐 세계,<br>그리고 멈춰 서서 지켜내는 세계까지.<br>이제 마지막 이야기가 남았습니다.</div>
+    <div class="cbtn">
+      <button class="btn on-dark" onclick="closeCelebrate();go('final')">마지막 이야기 열기 <span class="arw">→</span></button>
+      <button class="btn ghost on-dark" onclick="closeCelebrate()">로비에 더 머물기</button>
+    </div>
+  </div>
+</div>
+        
+<div class="topbar">
+  <div class="brand" onclick="go('intro')">
+    <img class="ld" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAUiElEQVR42u1da2xcx3X+zpm59+6TyyWX1FvyS5Yly3Gc2Gliu3KcB4I4cBzDddPCbZM6/dWiARKgfxO0RX/0j4MiKFoECYqk6SNJ3aaJ5SRO49p1Ij/aRLZl+SFbtiRLskVyueS+7t69M+f0B5cyQ4sUpTjk0tQAC5DY3bv3znfOdx5z5ozB6hs05wUAZs7fF8YyTP6FB1rBe9VsNrsxk8lcHQTRdQBGATyTpslP0zR9vdlsVgHo7GcvAPAWT36pVLomirJ/ysw7jeEdzKasqioiR1R12vv03rGxsXsAtFcLCKYPuf2MQjIwMHBZFOU+HwT2o0QUAogB5IhIAVgAIYCutbaZy+Vei+M4WQ0CZvtFuudI6ywQMud/yWQyH7TW3ACQJ8ImVX09TdMvEyEEaLOqtABqEFGm2+1uAtAFkFzQgKWDEPSk2M0BgwFIuVy+ytrwM8zmYiJNRfSoc92/Gx8f+6tWq7nPWnOC2YxYa25UpSQMo+szmagUx/GBCwAsPukmk8lsKRaLHykWS3cWiwO/l81mslEUaafTGe8Bkc3n87cR0ToiKnrvn+x04r+dnJz8p941kiRJjuVy2d3MfJExZpsx5j3M5hIi7Ot2u9V+pqKVBKAwPDx8ZxRFe6wNrrLW3gqgaEzwUWvtx4MgerXTaZ8cHV3/Z9ba20X0uKpOAPCdTrw3TdOxnoYAgFhrJ5jtDlUCEQwRr2M2g0FgH0uSpNOvIKwUALlisfz+IAg+ZIy5AtDXVfGQc91/ZKZBZrPTGN6ezeZ2GWNuMsbuYObNAEXep9+bnp7+0Sw9zWpTkiST+XyuYgzfzMyWCDnv/ZO12uTPAFwAYK5HMzg4eL21vIMIVWazVcR/fXx87FtxHB/x3v8iiqI9xgTXM/N2VUwBMkVkNqv6V5Mk+UaSJK/Nuy4D0CiKJAjCO4wxuwDKENF4FIUax/GLPdvSd4NXyPkqWhv+pohovT712YmJiUd6wmDiOD4uoj8HVIgobwztEtETznW/q6qvGGPiM1xQAFCtVjvsnPuOqrRE5FUi2mlteMfg4OCOfo17eJmlXwFEzBgVkSPe++PMnM5xOxUAeZ/+yLn0J6pyCCCrqnUROSqijW63O77I9duAHAYoR0QRoEyEMhGt71cjvOwaUCqVssbQqIi+akywJZvNmjlupwAAM/+vc+kDABVnfHmqEPF27+VAs9mc6H12fpSrAOC9f8x7v09EThFxlpm3Mge7exqmax4AVa20Wq0HvO8eJ6KMqjbn39P4+HiTyB5j5isAbTDToDF0aZr6Zxe5bwVAk5OTx1X9E0S0EUBIxOUgCG4vFocvW1naXXkAFEAYBJnbcrnC+621G5PE31etVhvz8jYKgNJUTojIlKrWmCmnSlNBgOJSnsd7/zOAQiIeBQBj+LpMxn7iAgXNUEzTGPNxgEdVk4mFwGJ2DiAB+CKA8t67w87R9AL0M/f6mJgIHk7T7ldE/LNECInIBIG9BUBm1mCvVQC00Zh6UMT9D5Eeb7VaZ5pQBYA4jqdF5HlAO4B6a4OrmSl3Fm+ml4p+rQ1Aiagy+1ERPd6PruhyA2Ct7Tac01dVtd1LltGZYoUgCHIicpwIHqAcM10VBLT7LBrwRoBjaHDG5sikqkw454728k1L+v7bDQACgHK5PBpF5T0Ait6jNRtAnekLURQVjKGtRLzJGLONiOyMm7k0f77b7d7rXHevKlqqqDHz7kqlclu/xQPLmo5W1SFr7WUzvr4sSgfMvJWIN6pqVxWxqqLn2SxJgjudztEwjMqAwnv/HBFlmXn9vJhkbWmAMWHFGHslQGVV01jAIGpPgl8W8S8CRIA2VeVlwOwGkH2D6xflugLAFYBKxtitqlpPU32u32zAsmqAczIJ0LiIHkoSObxYxGyt3SiiVWu1KaJKRDlmzRcKhUKz2YzP4u6i0WgcNcZ8OQyjPQBtEZEjnU7zmX6zAcsFgAIAkZtUlQPOpY/EcVhfbDJEpMYsTVV1RFQGaD0gJ5rNZrrE30ympqZ+WCgUHoui6L2qeiqO4xNrFQD0AqQMwKm19lKg+toCfKwz2uIOGRPUVPUEEW313j3knD+ImbXgpY602WyON5vN71/IBc0Y1gIzAiLz7lKpNLKYttTr9ab3/phz/qVe1YMSkQeQnqMUU+85+3I9YFk1QMQExkCMoUFVXgfg5UU8EgfIa6o66ZxvAPoaIE/hjUWYc6G/vi1PWWY3FHVVbalSGATBpQAeXQyvycnJH5bL5ceBWGu1zusAPN5mY1kBMMbHgC0TkRfxk0v4SqNWqzXwNh7LHAeYdVEU/paqdlqt1lNL4HLCm4txLwDwqwXDJMaYy3O53MZz4O++5vFVA4CqNpl5m7XmY8x29xwPZc2OZbUBaco+CNx+wDSJdGoZJHuuh8Xn4UH9+u3icv5Ytxu3wjCzkZk2qKISBPZgkiQ1LJIVPUdfH/jljRuCNzZwyFrWgNnJja2lB73XQ4BXZvbnmRqYa5TlDJqULZfLNzMHQ6ouNsZscM49XKvVDiwQfa/YWG0bNM4EFpVKpW3M4Q7nOkeYOfXebw7DzI1RFP0hgDFA897roTTtfKlWqz26AEWtGQD4HKPU+dzNw8PD2wG7iVm2OOdiY4JrgsB+XFWfSVP3nLXmMiIeZebNM8uSmoqgKeIPp6n7Thw3fxTH8cl+AIFWgdQrAAwNDW0GsFlVS8bYDwdBsIeZ1zvnn2Hm9cy8kYgq3vtne8W5lxJRqKodVQCQk8xmg/fuxTR1/8GMTJqm/9yjpRUDgfp98iuVynYR2QbwLhH3ShBEtxjDW0TkmLXhhwElQBNVMjPGXV5yzu/vac4RVa0aYy4HdICIrgDQUaUQUPbe/zhJ4m/U6/XD52mLVpcbeh6Sn7c2uEdEx1qtxj2tVuuF4eGRrSLSNsaUACEiDlURqOoxEamrotvptP++Xq8/D2Bu0ZcZHh6+VQSXRlG4h5kvZrZ3E2Vq9Xr9S2+BJ9b/bui5aGWlUvlYNpv9TSIeVNX9U1O1vQCEmY4B+jIzQQSvqkoDQKzqjzsnD4i4b9ZqtccxU3ExNw0tcRwfMoabQRBeSsSbAY2dk0fjuPUMVijRR/0o+UNDQ5uNCb6oquONxvRXkyR5BW/efkoARsrl8s2A4TTtPNVsNp9dxMMhABgZQZ5o3ReNsR8S0aMi/ohz/mCtNvEvPY1ZVnvQjxqQDcNwW7ebPNvp6INJ0jqyQAygAFqlUunIxMT4091u99ScgGyhCeR2G0k2m02I+J1EgCpxEJjrgyB4tdPpvLTcQtlv21RRKBS2M/NIo9HY71xn7CwTQq1Wq4s3qivO5tYqAGq328cymewggDwzWUBVlabiuL0fy1y6yP1EPeVy+YZMJnOj9/7AEulAFwnQFo3Mnev+QFUnZ/aS2Z3MuKRUKm1Zq16QAkCSJIe9D05aq+eSOJsPwpI53Bh7gzG8kwgZ781GInsVgFdWKipd4bE5y8yDUaTcarXa5wGgnosmMHPVueS7zrnHAaIZIE4X/64pG8AAdHCQrwyC4P2q+kKSJGMLeGpnLOQtlUqDuVzuA5lM5goiajvn6mejvE6n0wnDMEvEg8bwDlXKAP75dru9b61RkACAqlrn3L7p6ekjC1DMmQwsAUAYZm631nzOOf+YCHXjOK724gA5ixaEgEyrYoqZthKZynnalFUNABWLxSEiKojI8blGeWRkpJCm6TVhmPkAkZa73e7X5uVuFICKOAcYMobXBwGPFovFaxqNxn4sXMQ1W/44aoz9oPdyhAivA7SzWCxe3mg0XsAyLeD0gw0gETGdTueVJEl+SerGx8dtGEa/GwTB54wJPg2YLfOoSMvlyifDMPoMESUiOm5tcLu14UWYadZBi7m8zHyMmbcTgUXkMCC1IAjKa80IS6vVmgiCoBVF0dTcN0qlElRBqtIUkYdEJva9mUa0AyCnigIRhlSRMOPFXmqBFqO9RsO/4Jz/aY8J2iJ6SlVPrBUKmqWRYrlc3O0cpF6v/9/c96enp+ORkcwTInJ5t+u+OT2NKcxbXqxWq/9ZLpdfIqJN3vOESNJsNBrH5k70Qr+dyciVRGpn4gG61Bg6NDFRWzMAAAAGBgbWidCmXtnh/CXKZHz81D8UCoXvN5vN2kITU6vVDgI4eK5xRxAENxsTXOu9fxigoipNzouq39YURABgrX1HFGV/m5nzC9wT9TZn+7M8x+yLlqh5RlUTVZkCwN67p5Mk3rsSPvhKRr/EbLcaw9cEQbB5CZHuYq7s7Gupkhumafq4c34vEa+31l7fq77GWskFKQBS9a80m40/mJiYeGgR3n7L6SCTyYzOSH76ojG0BYB67+O1pAG9+IvLURS9L5vNls5T+ug8gA9yudy1RFRgtiVVrPPeP9RoNF7GMtcQrbQRVu+7TwLm6l7XlPMRIDkPsCJrgw+I6LS1XCGiQEQOYWYj97IuTa54HCAisaqmzNHF5zKJg4OVPSMjI1/sVUuciyZooVDYAlBkLV9JZK7z3j2Rpsm+5XQ/VxoAAoBsNrspm83/ubX2OmMkXuL3dHh4uMiMd6rqlKpuOYff1GKxOJzPFz5vjHknEQci/pVuN/lmvV4/ihUoT1lRCjLGJIDc572PjDEXA3h6Kd/rdrsbM5ncThF3oNPpHDsX4JnDqwFkRWTcOfegiJti5n09+ln2NfKV0gCd9e/r9frDzGYnYC7DTN/QxdzO2T3AR7yXJ5zTcVU1S6QOAqDMkgVoiIgiVe2mabqvWq0+vxL00w82gFSjQMQfAHwbQG4p1FUqlXIAClFk353N5m9cIv1IoYAKwJuN4VFjeBczX2aMme2ouCIVIivuBSXJ9HihMJwBeF2pVBqanp6eOpsUi8hIJmPuJKK0l4zL4iyp52Kxsj2btZ8FlEW0SoSS9+kPpqenX8YKliaudOdcAECxOPCpmbbDcjiO4+fPJo2FQiFVJaj6I8yUD4JgotfKcr4LebqEZWCg8Clr7Wdmum+hm6bua5OT1X9daS+wH9LRATNvIeICgCLeaMaxoA2YnJxsdbvxk8bYncbYq703nUU+L8PDw7daa+9Q1QOqSEX8s9Xq2LeWO+3QbxQ0O8kO0HFjzK1BkLm7VCodmJ6e3t/TTn8mOimXywVVHU2S9D5mHWJ23XnXJADYsGFDNkmSjxCZqwC0RPQUkQTep/cDp1PbK7o/YKUX5QmAC8PwF6roEmGAmZJ2u/00ZloSnIlSkM/nh60N71LVloibBJBPkuTIPIlWEbsrk4n+mIhyInKCGRu891+vVqs/QJ/skumHqgiK47jeajUfzOcL72U27w3DTMiMk2maNubdY28RPhwOAvsxIq4YwyUig0Ihf6jdbqe9SQ3L5fKHgsBea4y5yBh7HaCp9+6rExMT96GPamL7pTSRASCKwpSItzDzhjCMLiHKv5imrcZ8e5UkSWJM2BBJnzLGbFOltFod39eb/Gh4ePgWY+ztxvAmAJOq/pk4bv/11NTUo+izo036qTqaAOjg4OA7mPmaIAg/oYrj3qf/3ul0nm21WqfmfC4oFAqXGRPuMAabiSjDzJ3e0SbbjAmuF3HPee9/0Wq1vh3HcQ19eq5MP23QUAA0NTX19MDAQMba6E4iXBVF2bvCMHoqk8n8RbVa3d8znl1r7UgYhp+01rwDIBChoqrTAFlAm2ma/iSO4x/PadLUl4f69OMWJQIQDQ6O7LBWd1obfpqILgc0BjCRpv5eAAgCc7cxdjtAWUBpprGfdACtdbvp3omJsS/0wJo15H3Z6qDvt6lms8MbwxA7Mhl7M7O9iwiG2WwjIqiqV9UUIBVxjzvn701Tf0Cke6Ber09iFRxl1c8AnD6eZPZey+Xybmvtu4wxu5jN9UR8BYCWc+7n3W76rVpt4ttYZcP08b3N0sbpXS+dTmes3W4/1Ww2/yuKoo3W2htV9WSvrofb7dY+rLKuKnYV3ONc/p5bdjKmijbA64zBOkBTzKSzV8UBbqtBAxYDQ9vt9sEwDE4aY96lKmPO+fvjuL3qNGC1AXDabhUKhTIzX6yKFjPnAKDdjvYB8arSAF6tAGSz+d/JZnNfAFD3Xl4j0oGBgUm72h5mtWqARlGuzIx1M+eQoZWm3QdVw2qv/9AFDfi1GwPVjoh6QBNmKopI2jtZdTHgZj0qRp80Aly1AAQBZY3hzd7LYQC5KMrewczb5xjr+bHOrAGfW0O64gbbrmINGFPVaWvte5jpEiI5JGLeDeARzBxdON+FpXw+PxqG4SXesxNJmqo6OSfJdwGAJfK/AaBpqgNE2iDCiIgcEkEzCMLby+Xy92q12mybepRKpYvCMHO3tfYagEaYaaeqTnkfPC/iH2LmrzQajepKpS3sKpr42aLZFADC0P6GMXwJEUDEW4OAKiLastbeNDg4yNbarc4pZTLR56y1e4jIiEiHCE0izhPZ3c7xUBTp041GY+9KAbAaOmad5vSBgYGhTCb/+0Syldlcy2x2qcp473yBANCGiI4DVCJCCdCYiAtEVOiBZ72Xo0QoqMqxTqd7T5p2/rvZbI5fAGABd7P3d6FSqdxiTHCntfa2nhZ0ibio6o/PpB9oA4CQiFgVnpmimUwpUsyUIp5S1RPOuUeIqOtc98HJyckHLhjhxdMO+Upl9I+MsXuM4fcR0RAzqYgyEeUBdQBlZg74gWfmQBVMJCxyulfclIjsTZLO3zjnXmg0Gm28UcS1rJuyV5MG2FwuVxkYGPhL5uAuZgqIiAGI9mYVAKuqU5UqEXlVKKCx93rQe38/4JtE5iJVf3BiYuLHmNk3vJCGXdCAOXGJVCqVG5jtnxgT3NQ7P8z1inBnAyg7U5LiX1LFEVU55b0cTNPO09PTeAqYri1wbT2De3oBgHm0A4BvMsZcC2CAiAJVNUTEIn5MRBuqeMZ79900TfY75042m80qfnmnjMEvryco1njr4nMCQMT9W5rKi8aYHQBbAEMACt6n93e73Zfr9fqTC1DK7PBvBvXCeKuFpa9yOm83I0wL5HG43zj8Vx3/D3WsKsRrfohjAAAAAElFTkSuQmCC" alt="모레오">
+    <img class="lw" src="data:image/png;base64,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" alt="모레오">
+    <span class="bn">모레오</span>
+  </div>
+  <span class="home" id="homeBtn" onclick="go('lobby')">로비 ↺</span>
+</div>
+
+<script>
+(function(){
+  var screens = document.querySelectorAll('.screen');
+  var visited = new Set();
+  var homeBtn = document.getElementById('homeBtn');
+  var darkScreens = {lobby:1,w1:1,w2:1,w3:1,w4:1};
+  var darkScreens = {present:1,lobby:1,w1:1,w2:1,w3:1,w4:1};
+  
+
+  function setActive(id){
+    screens.forEach(function(s){ s.classList.toggle('active', s.id===id); });
+    var el = document.getElementById(id);
+    if(el){ el.scrollTop = 0; }
+    document.body.classList.toggle('dark-ui', !!darkScreens[id]);
+    var showHome = (id.charAt(0)==='w' && id.length===2) || id==='final';
+    homeBtn.classList.toggle('show', showHome);
+    requestAnimationFrame(function(){ armReveals(el); });
+        if(id==='lobby' && pendingToast){
+      pendingToast = false;
+      setTimeout(function(){ visited.size===4 ? celebrate() : showToast(); }, 550);
+    }
+  }
+var fader = document.getElementById('fader');
+var fading = false;
+function transitionTo(id){
+  if(fading) return;
+  fading = true;
+  fader.classList.add('on');
+  setTimeout(function(){
+    setActive(id);
+    setTimeout(function(){
+      fader.classList.remove('on');
+      fading = false;
+    }, 80);
+  }, 400);
+}
+window.go = function(id){ transitionTo(id); };
+
+  var pendingToast = false, toastTimer = null;
+
+  function showToast(){
+    var n = visited.size;
+    document.getElementById('toastT').textContent = n + ' / 4 미래를 다녀왔습니다!';
+    document.getElementById('toastS').textContent =
+      n===3 ? '이제 하나 남았습니다. 마지막 문을 열어보세요.'
+            : '다른 미래도 계속 탐험해볼까요?';
+    var bars = document.getElementById('toastB').children;
+    for(var i=0;i<4;i++){ bars[i].classList.toggle('on', i<n); }
+    var t = document.getElementById('toast');
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 3800);
+  }
+
+  function burst(){
+    var colors=['#3ddc84','#d2402a','#38d6ff','#e5a534'];
+    var host=document.getElementById('cfx'); host.innerHTML='';
+    for(var i=0;i<80;i++){
+      var p=document.createElement('i');
+      p.style.left=(50+(Math.random()*2-1)*10)+'%';
+      p.style.background=colors[i%4];
+      p.style.setProperty('--dx',((Math.random()*2-1)*55)+'vw');
+      p.style.setProperty('--dy',(-32-Math.random()*40)+'vh');
+      p.style.setProperty('--rot',(Math.random()*720-360)+'deg');
+      p.style.animationDelay=(Math.random()*.4)+'s';
+      p.style.animationDuration=(1.8+Math.random()*1.3)+'s';
+      host.appendChild(p);
+    }
+  }
+
+  function celebrate(){
+    document.getElementById('celebrate').classList.add('show');
+    burst();
+    setTimeout(burst, 1400);
+  }
+  window.closeCelebrate = function(){
+    document.getElementById('celebrate').classList.remove('show');
+    document.getElementById('cfx').innerHTML='';
+  };
+
+  window.enter = function(n){
+    visited.add(n);
+    var door = document.querySelector('.door.d'+n);
+    if(door){
+      door.classList.add('visited');
+      var st = door.querySelector('[data-state]');
+      if(st){ st.innerHTML = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><span>다녀왔습니다</span>'; }
+    }
+    document.getElementById('progText').textContent = visited.size + ' / 4 지나옴';
+    document.getElementById('lobbyFinal').classList.toggle('show', visited.size===4);
+    pendingToast = true;
+    transitionTo('w'+n);
+  };
+  
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.1, rootMargin:'0px 0px -6% 0px'});
+
+  function armReveals(scope){
+    if(!scope) return;
+    scope.querySelectorAll('.reveal:not(.in)').forEach(function(el){ io.observe(el); });
+  }
+  armReveals(document.getElementById('intro'));
+})();
+</script>
+</body>
+</html>
